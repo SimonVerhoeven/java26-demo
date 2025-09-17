@@ -18,16 +18,44 @@ Java 26 offers enterprises:
 
 == Core
 
+https://openjdk.org/jeps/504[JEP 504: Remove the Applet API]
+
+The `Applet` API which was deprecated in JDK 17 through https://openjdk.org/jeps/398[JEP 398].
+Generally speaking this will have a negligible impact given that web browsers no longer support applets.
+
+The following will be removed:
+
+* `java.applet` package
+* `java.beans.AppletInitializer`
+* `javax.swing.JApplet`
+
+Additionally, references to the above will be removed from:
+
+* `java.beans.Beans`
+* `javax.swing.RepaintManager`
+
+
 == HotSpot
+
+=== https://openjdk.org/jeps/522[JEP 522: G1 GC: Improve Throughput by Reducing Synchronization]
+
+The goal is to increase the average application throughput when the default G1 garbage collector is being used.
+
+This will be achieved by reducing the synchronization overhead between threads and reducing the size of the injected code for write barriers while making sure that the overall architecture of G1 is maintained.
 
 == Language specification
 
 == Security
 
-
 == Thoughts
 
 == Migrating
+
+=== Applets
+
+This API has been removed as part of https://https://openjdk.org/jeps/504[JEP 504], so if you rely on this you will need to migrate to a different API. For example, the `AWT` API contains several alternatives for the `Applet` class.
+
+I you're casting the result of a `java.net.URLConnection` `getContent()` method to `java.applet.AudioClip` will need to be adapted to the ne return type determined by the JDK's built in content handlers.
 
 == Resources
 
