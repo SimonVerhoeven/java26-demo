@@ -14,7 +14,7 @@ Java 26 will be released on the Xth of March 2026, and once again it helps move 
 
 == Why Upgrade?
 
-Java 26 LTS offers enterprises:
+Java 26 offers enterprises:
 
 == Core
 
