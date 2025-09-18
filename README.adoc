@@ -18,7 +18,7 @@ Java 26 offers enterprises:
 
 == Core
 
-https://openjdk.org/jeps/504[JEP 504: Remove the Applet API]
+=== https://openjdk.org/jeps/504[JEP 504: Remove the Applet API]
 
 The `Applet` API which was deprecated in JDK 17 through https://openjdk.org/jeps/398[JEP 398].
 Generally speaking this will have a negligible impact given that web browsers no longer support applets.
@@ -34,6 +34,28 @@ Additionally, references to the above will be removed from:
 * `java.beans.Beans`
 * `javax.swing.RepaintManager`
 
+=== https://openjdk.org/jeps/517[JEP 517: HTTP/3 for the HTTP Client API]
+
+The https://en.wikipedia.org/wiki/HTTP/3[HTTP/3 protocol] will now be supported by the https://cr.openjdk.org/~dfuchs/8291976/apidoc.04/api/java.net.http/java/net/http/HttpClient.html[HTTP Client API], allowing us to easily interact with HTTP/3 servers with minimal changes.
+The https://en.wikipedia.org/wiki/QUIC[QUIC protocol] will not receive an API through this JEP, nor a sever-side implementation.
+
+This can be done for all requests by configuring it on the HttpClient object:
+
+[source,Java]
+----
+HttpClient client = HttpClient.newBuilder()
+   .version(HttpClient.Version.HTTP_3)
+   .build();
+----
+
+Or on a request basis:
+
+[source,Java]
+----
+HttpRequest request = HttpRequest.newBuilder(URI.create("https://github.com/SimonVerhoeven/java26-demo"))
+                         .version(HttpClient.Version.HTTP_3)
+                         .GET().build();
+----
 
 == HotSpot
 
