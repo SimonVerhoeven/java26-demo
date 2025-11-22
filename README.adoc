@@ -18,6 +18,49 @@ Java 26 offers enterprises:
 
 == Core
 
+=== https://openjdk.org/jeps/500[JEP 500: Prepare to Make Final Mean Final]
+
+When deep reflection's used to mutate final fields, warnings will be issued. The intent is to help developers prepare for future releases where this is restricted to help make our programs safer and maybe faster. (see for reference: https://openjdk.org/jeps/8305968[integrity by default]).
+
+[,console]
+----
+WARNING: Final field foo in x.Y has been [mutated/unreflected for mutation] by class dev.simonverhoeven.z.caller in module Foo (file:/path/to/somefile.jar)
+WARNING: Use --enable-final-field-mutation=N to avoid a warning
+WARNING: Mutating final fields will be blocked in a future release unless final field mutation is enabled
+----
+
+API developers can avoid the current warnings and future restrictions by selectively enabling final field mutation where it's essential.
+
+To enable final field mutation by any code on the class path regardless of where the field's declare we can use the command-line option: `--enable-final-field-mutation=ALL-UNNAMED`.
+
+In case we want to be a bit more fine-grained, we can restrict it to specific modules by using: `--enable-final-field-mutation=module1, module2`
+Do keep in mind that the to be mutated field must also be open to the code that's performing the deep-reflection.
+
+Besides passing in the final-field option directly to the launcher as an option, there are other ways:
+
+* using an argument-file
+* setting `JDK_JAVA_OPTIONS`
+* adding it to the manifest of an executable JAR
+* through the `JNI Invation API` passing the option to an embedded JVM that it creates
+* passing it to `jlink` when creating a custom Java runtime
+
+We can also control what action the Java runtime takes when an illegal mutation is attempted:
+
+* `--illegal-final-field-mutation=allow` will allow it without warnings
+* `--illegal-final-field-mutation=warn` which is the default in JDK26 will allow it with a warning
+* `--illegal-final-field-mutation=debug` will behave the same as warn, but wil also issue a stack trace
+* `--illegal-final-field-mutation=deny` will result in `Field::set` throwing an `IllegalAccessException`. This will become the default in a future release
+
+To help facilitate finding code that mutates final fields it's recommended to use `--illegal-final-field-mutation=debug` and/or use the Java Flight Recorder and look for `jdk.FinalFieldMutation` events.
+
+[,console]
+----
+$ java -XX:StartFlightRecording:filename=catchmutation.jfr ...
+$ jfr print --events jdk.FinalFieldMutation catchmutation.jfr
+----
+
+
+
 === https://openjdk.org/jeps/504[JEP 504: Remove the Applet API]
 
 The `Applet` API which was deprecated in JDK 17 through https://openjdk.org/jeps/398[JEP 398].
