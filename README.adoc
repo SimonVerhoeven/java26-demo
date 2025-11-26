@@ -133,6 +133,24 @@ This will be achieved by reducing the synchronization overhead between threads a
 
 == Language specification
 
+=== https://openjdk.org/jeps/507[JEP 530: Primitive Types in Patterns, instanceof, and switch (Fourth Preview)]
+
+This JEP, first introduced as https://openjdk.org/jeps/455[JEP-455], aims to enhance pattern matching by allowing primitives in all pattern contexts and allowing one to use them with instanceof and switch as well.
+
+[source,java]
+----
+if (someObject instanceof int someInt) {
+    System.out.println("The int was: " + someInt);
+}
+----
+
+Compared to the third preview in JDK 25 through https://openjdk.org/jeps/507[JEP-507] there are 2 changes.
+
+. the definition of unconditional exactness has been enhanced: The concept of "unconditional exactness" determines if a type pattern in a `switch` will always match, making subsequent cases unreachable. JEP 530 refines this definition to be more accurate, which in turn improves the next point
+. tighter dominance checks have been introduced in switch constructs: Dominance refers to one pattern matching all the values that another pattern matches. With the updated rules, the compiler can now more reliably detect when a `case` label is dominated by a previous one (and is therefore unreachable) and will report a compile-time error
+
+This means that a small number of switch constructs that were legal under JEP-507 will be rejected under JEP-530. For instance, a case with a constant label that can be unconditionally converted to the type of a preceding pattern (like a `case 42` after a `case short s`) will now be seen as dominated and cause a compilation error, preventing a potentially unreachable branch of code.
+
 == Security
 
 == Thoughts
