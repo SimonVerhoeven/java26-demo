@@ -125,6 +125,15 @@ The developers have confirmed that the API will remain in incubation until proje
 
 == HotSpot
 
+=== https://openjdk.org/jeps/516[JEP 516: Ahead-of-Time Object Caching with Any GC]
+
+The ahead-of-time (AoT) cache introduced by https://openjdk.org/projects/leyden/[Project Leyden] will be enhanced so that it can be used with any garbage collector (GC).
+This notably includes the low-latency Z Garbage Collector (ZGC) as previously GC-specific formats were used that were not compatible with ZGC's concurrent collection approach.
+
+To achieve this, a neutral, GC-agnostic format will be used to load cached Java objects sequentially into memory, rather than the current approach of directly mapping them into memory in a GC-specific format. This will enable us to combine ZGC’s low latency with AOT’s fast startup, eliminating the historical tradeoff between startup performance and tail latency.
+
+This change will result in swifter startup and warmup times.
+
 === https://openjdk.org/jeps/522[JEP 522: G1 GC: Improve Throughput by Reducing Synchronization]
 
 The goal is to increase the average application throughput when the default G1 garbage collector is being used.
