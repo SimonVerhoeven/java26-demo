@@ -110,8 +110,8 @@ By reifying the task-subtask relationship at runtime, structured concurrency mak
 
 This enhancement does not aim to replace existing concurrency constructs like `ExecutorService` or `Future`, but rather to complement them by offering a more structured and reliable alternative for managing concurrent tasks.
 
-Compared to the fifth preview (https://openjdk.org/jeps/505[JEP 505]), there's on change: the addition of an `onTimeout` method on the `Joiner interface` which allows an implementation to result in case a timeout occurs.
-The architects also hope to gather more feedback on the changes made in t0t (chiefly the replacement of the public constructors of StructuredTaskScopewith static factory methods).
+Compared to the fifth preview (https://openjdk.org/jeps/505[JEP 505]), there's one change: the addition of an `onTimeout` method on the `Joiner interface` which allows an implementation to result in case a timeout occurs.
+The architects also hope to gather more feedback on the changes made in JEP-505 (chiefly the replacement of the public constructors of `StructuredTaskScope` with static factory methods).
 
 === https://openjdk.org/jeps/529[JEP 529 Vector API (Eleventh incubation)]
 
