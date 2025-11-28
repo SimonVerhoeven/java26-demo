@@ -142,7 +142,7 @@ This will be achieved by reducing the synchronization overhead between threads a
 
 == Language specification
 
-=== https://openjdk.org/jeps/507[JEP 530: Primitive Types in Patterns, instanceof, and switch (Fourth Preview)]
+=== https://openjdk.org/jeps/530[JEP 530: Primitive Types in Patterns, instanceof, and switch (Fourth Preview)]
 
 This JEP, first introduced as https://openjdk.org/jeps/455[JEP-455], aims to enhance pattern matching by allowing primitives in all pattern contexts and allowing one to use them with instanceof and switch as well.
 
