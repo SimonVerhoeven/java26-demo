@@ -18,7 +18,7 @@ Java 26 offers enterprises:
 
 == Core
 
-=== https://openjdk.org/jeps/500[JEP 500: Prepare to Make Final Mean Final]
+=== https://openjdk.org/jeps/500[JEP-500: Prepare to Make Final Mean Final]
 
 When deep reflection's used to mutate final fields, warnings will be issued. The intent is to help developers prepare for future releases where this is restricted to help make our programs safer and maybe faster. (see for reference: https://openjdk.org/jeps/8305968[integrity by default]).
 
@@ -59,9 +59,9 @@ $ java -XX:StartFlightRecording:filename=catchmutation.jfr ...
 $ jfr print --events jdk.FinalFieldMutation catchmutation.jfr
 ----
 
-=== https://openjdk.org/jeps/504[JEP 504: Remove the Applet API]
+=== https://openjdk.org/jeps/504[JEP-504: Remove the Applet API]
 
-The `Applet` API which was deprecated in JDK 17 through https://openjdk.org/jeps/398[JEP 398].
+The `Applet` API which was deprecated in JDK 17 through https://openjdk.org/jeps/398[JEP-398].
 Generally speaking this will have a negligible impact given that web browsers no longer support applets.
 
 The following will be removed:
@@ -75,7 +75,7 @@ Additionally, references to the above will be removed from:
 * `java.beans.Beans`
 * `javax.swing.RepaintManager`
 
-=== https://openjdk.org/jeps/517[JEP 517: HTTP/3 for the HTTP Client API]
+=== https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API]
 
 The https://en.wikipedia.org/wiki/HTTP/3[HTTP/3 protocol] will now be supported by the https://cr.openjdk.org/~dfuchs/8291976/apidoc.04/api/java.net.http/java/net/http/HttpClient.html[HTTP Client API], allowing us to easily interact with HTTP/3 servers with minimal changes.
 The https://en.wikipedia.org/wiki/QUIC[QUIC protocol] will not receive an API through this JEP, nor a sever-side implementation.
@@ -98,7 +98,7 @@ HttpRequest request = HttpRequest.newBuilder(URI.create("https://github.com/Simo
                          .GET().build();
 ----
 
-=== https://openjdk.org/jeps/525[JEP 525: Structured Concurrency (Sixth Preview)]
+=== https://openjdk.org/jeps/525[JEP-525: Structured Concurrency (Sixth Preview)]
 
 This proposal aims to address some of the frequently encountered challenges in concurrent programming by introducing an API that treats groups of related tasks running in different threads as a single unit of work.
 
@@ -110,14 +110,28 @@ By reifying the task-subtask relationship at runtime, structured concurrency mak
 
 This enhancement does not aim to replace existing concurrency constructs like `ExecutorService` or `Future`, but rather to complement them by offering a more structured and reliable alternative for managing concurrent tasks.
 
-Compared to the fifth preview (https://openjdk.org/jeps/505[JEP 505]), there's one change: the addition of an `onTimeout` method on the `Joiner interface` which allows an implementation to result in case a timeout occurs.
+Compared to the fifth preview (https://openjdk.org/jeps/505[JEP-505]), there's one change: the addition of an `onTimeout` method on the `Joiner interface` which allows an implementation to result in case a timeout occurs.
 The architects also hope to gather more feedback on the changes made in JEP-505 (chiefly the replacement of the public constructors of `StructuredTaskScope` with static factory methods).
 
-=== https://openjdk.org/jeps/529[JEP 529 Vector API (Eleventh incubation)]
+=== https://openjdk.org/jeps/526[JEP-526: Lazy constants (Second preview)]
+
+This preview API, previously known as https://openjdk.org/jeps/502[JEP-502: Stable values] introduces immutable value holders that are at most initialized once as it will help us move towards deferred immutability through `StableValue` and `StableSupplier`.
+
+One of the key benefits of stable values is in how they're handled by the JVM. Internally the stable values use the internal `@Stable` annotation which despite the values being non-final marks them as not changing after the initial updates. Thanks to this, these values benefit from the same constant-folding optimizations as final-fields.
+
+Compared to the previous iteration, we see quite a number of changes, so please try out this API and provide feedback on the mailing lists.
+
+. The API has been renamed from `StableValue` to `LazyConstant` as to better capture the intended high-level use case of a single constant value that is initialized lazily.
+. The focus of the API has moved to more high-level use cases, so low-level methods such as `orElseSet` and `trySet` have been removed. Meanwhile, the factory methods that take value-computing functions remain.
+. The factory methods for lazy lists and maps have been moved to their respective interfaces to make them easier to discover
+. The API has been simplified by removing the `function` and `intFunction` factory methods given they provided minimal benefits over lazy lists and maps.
+. Null is no longer allowed as a computed value as to improve performance, and this better aligns lazy constants with other contructs in the language such as unmodifiable collections and `ScopedValue`
+
+=== https://openjdk.org/jeps/529[JEP-529: Vector API (Eleventh incubation)]
 
 The eleventh iteration of an API for vector computations, this time without any significant changes compared to the previous iteration (https://openjdk.org/jeps/508[JEP-508]) . It aims to be a way to express these in a manner that compiles reliably to optimal vector instructions on supported CPU architectures to achieve better performance than equivalent scalar computations.
 
-Compared to https://openjdk.org/jeps/489[JEP 489: Vector API (Ninth Incubator)] there are no API changes.
+Compared to https://openjdk.org/jeps/489[JEP-489: Vector API (Ninth Incubator)] there are no API changes.
 
 Two important changes are the increased usage of auto-vectorization on supporting x64 CPUs and now leveraging the foreign function and memory API to link native mathematical-function libraries.
 
@@ -125,7 +139,7 @@ The developers have confirmed that the API will remain in incubation until proje
 
 == HotSpot
 
-=== https://openjdk.org/jeps/516[JEP 516: Ahead-of-Time Object Caching with Any GC]
+=== https://openjdk.org/jeps/516[JEP-516: Ahead-of-Time Object Caching with Any GC]
 
 The ahead-of-time (AoT) cache introduced by https://openjdk.org/projects/leyden/[Project Leyden] will be enhanced so that it can be used with any garbage collector (GC).
 This notably includes the low-latency Z Garbage Collector (ZGC) as previously GC-specific formats were used that were not compatible with ZGC's concurrent collection approach.
@@ -134,7 +148,7 @@ To achieve this, a neutral, GC-agnostic format will be used to load cached Java 
 
 This change will result in swifter startup and warmup times.
 
-=== https://openjdk.org/jeps/522[JEP 522: G1 GC: Improve Throughput by Reducing Synchronization]
+=== https://openjdk.org/jeps/522[JEP-522: G1 GC: Improve Throughput by Reducing Synchronization]
 
 The goal is to increase the average application throughput when the default G1 garbage collector is being used.
 
@@ -142,7 +156,7 @@ This will be achieved by reducing the synchronization overhead between threads a
 
 == Language specification
 
-=== https://openjdk.org/jeps/530[JEP 530: Primitive Types in Patterns, instanceof, and switch (Fourth Preview)]
+=== https://openjdk.org/jeps/530[JEP-530: Primitive Types in Patterns, instanceof, and switch (Fourth Preview)]
 
 This JEP, first introduced as https://openjdk.org/jeps/455[JEP-455], aims to enhance pattern matching by allowing primitives in all pattern contexts and allowing one to use them with instanceof and switch as well.
 
@@ -168,9 +182,9 @@ This means that a small number of switch constructs that were legal under JEP-50
 
 === Applets
 
-This API has been removed as part of https://https://openjdk.org/jeps/504[JEP 504], so if you rely on this you will need to migrate to a different API. For example, the `AWT` API contains several alternatives for the `Applet` class.
+This API has been removed as part of https://https://openjdk.org/jeps/504[JEP-504], so if you rely on this, you will need to migrate to a different API. For example, the `AWT` API contains several alternatives for the `Applet` class.
 
-I you're casting the result of a `java.net.URLConnection` `getContent()` method to `java.applet.AudioClip` will need to be adapted to the ne return type determined by the JDK's built in content handlers.
+If you're casting the result of a `java.net.URLConnection` `getContent()` method to `java.applet.AudioClip` will need to be adapted to the new return type determined by the JDK's built-in content handlers.
 
 == Resources
 
