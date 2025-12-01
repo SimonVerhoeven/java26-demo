@@ -176,6 +176,26 @@ This means that a small number of switch constructs that were legal under JEP-50
 
 == Security
 
+=== https://openjdk.org/jeps/524[JEP-524: PEM Encodings of Cryptographic Objects (Second preview)]
+
+The second preview of this API which introduces a *preview API* in Java 26 for encoding/decoding cryptographic objects (keys, certificates, CRLs) to/from the PEM (Privacy-Enhanced Mail) format, simplifying a previously manual and error-prone process.
+
+The API centers on `DEREncodable`, `PEMEncoder`, and `PEMDecoder` classes, supporting standards like `PKCS#8` and `X.509`, with built-in encryption for private keys.
+
+The goals include ease of use and interoperability with tools like `OpenSSL` thus addressing a gap highlighted by developer surveys.
+
+The design avoids extending legacy APIs such as `KeyFactory` in favour of a dedicated, immutable, and thread-safe solution, though encrypted keys require password handling via `withEncryption()`/`withDecryption()`.
+
+It is possible that future iterations may expand support for non-standard PEM types via the `PEM` class.
+
+As this is a preview feature, you'll need to enable it through `--enable-preview` to experiment with it.
+
+Compared to the previous preview in Java 25 through https://openjdk.org/jeps/470[JEP-470] we see some changes:
+
+* The `PEMRecord` class has been renamed to `PEM` and now offers a `decode()` method to return the decoded Base64 content
+* The `EncryptedPrivateKeyInfo` class has been expanded with a `getKeyPair` method that allows us to decrypt a `PKCS#8-encoded` text containing a `PublicKey`
+* The `PEMEncoder` and `PEMDecoder` classes now allow us to encrypt and decrypt both `KeyPair` and `PKCS8EncodedKeySpec` objects.
+
 == Thoughts
 
 == Migrating
