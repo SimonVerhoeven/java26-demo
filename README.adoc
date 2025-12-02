@@ -104,14 +104,18 @@ This proposal aims to address some of the frequently encountered challenges in c
 
 The proposed approach, also known as structured concurrency, will help us streamline error handling, cancellation, and observability, making concurrent code more reliable and easier to manage.
 
-The main target is promoting a style of concurrent programming that eliminates common risks such as thread leaks and cancellation delays, while also improving the observability of concurrent code. The API itself is centered around `StructuredTaskScope`, which allows us to define a clear hierarchy of tasks and subtasks, ensuring that all subtasks are completed or cancelled before the parent task exits. This enforces a structured flow of execution, similar to single-threaded code, where subtasks are confined to the lexical scope of their parent task. The API also provides built-in shutdown policies (e.g., `ShutdownOnFailure` and `ShutdownOnSuccess`) to handle common concurrency patterns, such as cancelling all subtasks if one fails or succeeds. We can also define our own shutdown policies.
+The main target is promoting a style of concurrent programming that eliminates common risks such as thread leaks and cancellation delays, while also improving the observability of concurrent code. The API itself is centered around `StructuredTaskScope`, which allows us to define a clear hierarchy of tasks and subtasks, ensuring that all subtasks are completed or canceled before the parent task exits. This enforces a structured flow of execution, similar to single-threaded code, where subtasks are confined to the lexical scope of their parent task. The API also provides built-in shutdown policies (e.g., `ShutdownOnFailure` and `ShutdownOnSuccess`) to handle common concurrency patterns, such as cancelling all subtasks if one fails or succeeds. We can also define our own shutdown policies.
 
 By reifying the task-subtask relationship at runtime, structured concurrency makes it easier for us to reason about and debug concurrent programs. It also integrates well with observability tools, such as thread dumps, which can now display the hierarchical structure of tasks and subtasks.
 
 This enhancement does not aim to replace existing concurrency constructs like `ExecutorService` or `Future`, but rather to complement them by offering a more structured and reliable alternative for managing concurrent tasks.
 
-Compared to the fifth preview (https://openjdk.org/jeps/505[JEP-505]), there's one change: the addition of an `onTimeout` method on the `Joiner interface` which allows an implementation to result in case a timeout occurs.
-The architects also hope to gather more feedback on the changes made in JEP-505 (chiefly the replacement of the public constructors of `StructuredTaskScope` with static factory methods).
+Compared to the fifth preview (https://openjdk.org/jeps/505[JEP-505]) which saw several API changes such as the public constructors of `StructuredTaskScope` being replaced with static factory methods, the changes are relatively small this time:
+
+* The `allSuccessfulOrThrow()` method on `Joiner` now returns a list of results rather than a stream of subtasks
+* The `anySuccessfulResultOrThrow()` method on `Joiner` has been renamed to `anySuccessfulOrThrow`
+* The static `open` method of `StructuredTaskScope` that accepted `Joiner` and `Function` now expects `Joiner` and `UnaryOperator`
+* A new method `onTimeOut` has been added to the `Joiner` interface, which allows implementations to return a resul when the timeout expires
 
 === https://openjdk.org/jeps/526[JEP-526: Lazy constants (Second preview)]
 
