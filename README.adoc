@@ -31,7 +31,7 @@ WARNING: Mutating final fields will be blocked in a future release unless final 
 
 API developers can avoid the current warnings and future restrictions by selectively enabling final field mutation where it's essential.
 
-To enable final field mutation by any code on the class path regardless of where the field's declare we can use the command-line option: `--enable-final-field-mutation=ALL-UNNAMED`.
+To enable final field mutation by any code on the class path regardless of where the field's declared we can use the command-line option: `--enable-final-field-mutation=ALL-UNNAMED`.
 
 In case we want to be a bit more fine-grained, we can restrict it to specific modules by using: `--enable-final-field-mutation=module1, module2`
 Do keep in mind that the to be mutated field must also be open to the code that's performing the deep-reflection.
@@ -41,14 +41,14 @@ Besides passing in the final-field option directly to the launcher as an option,
 * using an argument-file
 * setting `JDK_JAVA_OPTIONS`
 * adding it to the manifest of an executable JAR
-* through the `JNI Invation API` passing the option to an embedded JVM that it creates
+* through the `JNI Invocation API` passing the option to an embedded JVM that it creates
 * passing it to `jlink` when creating a custom Java runtime
 
 We can also control what action the Java runtime takes when an illegal mutation is attempted:
 
 * `--illegal-final-field-mutation=allow` will allow it without warnings
 * `--illegal-final-field-mutation=warn` which is the default in JDK26 will allow it with a warning
-* `--illegal-final-field-mutation=debug` will behave the same as warn, but wil also issue a stack trace
+* `--illegal-final-field-mutation=debug` will behave the same as warn, but will also issue a stack trace
 * `--illegal-final-field-mutation=deny` will result in `Field::set` throwing an `IllegalAccessException`. This will become the default in a future release
 
 To help facilitate finding code that mutates final fields it's recommended to use `--illegal-final-field-mutation=debug` and/or use the Java Flight Recorder and look for `jdk.FinalFieldMutation` events.
@@ -61,8 +61,8 @@ $ jfr print --events jdk.FinalFieldMutation catchmutation.jfr
 
 === https://openjdk.org/jeps/504[JEP-504: Remove the Applet API]
 
-The `Applet` API which was deprecated in JDK 17 through https://openjdk.org/jeps/398[JEP-398].
-Generally speaking this will have a negligible impact given that web browsers no longer support applets.
+The `Applet` API was deprecated in JDK 17 through https://openjdk.org/jeps/398[JEP-398].
+Generally speaking, this will have a negligible impact given that web browsers no longer support applets.
 
 The following will be removed:
 
@@ -78,7 +78,7 @@ Additionally, references to the above will be removed from:
 === https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API]
 
 The https://en.wikipedia.org/wiki/HTTP/3[HTTP/3 protocol] will now be supported by the https://cr.openjdk.org/~dfuchs/8291976/apidoc.04/api/java.net.http/java/net/http/HttpClient.html[HTTP Client API], allowing us to easily interact with HTTP/3 servers with minimal changes.
-The https://en.wikipedia.org/wiki/QUIC[QUIC protocol] will not receive an API through this JEP, nor a sever-side implementation.
+The https://en.wikipedia.org/wiki/QUIC[QUIC protocol] will not receive an API through this JEP, nor a server-side implementation.
 
 This can be done for all requests by configuring it on the HttpClient object:
 
@@ -115,7 +115,7 @@ Compared to the fifth preview (https://openjdk.org/jeps/505[JEP-505]) which saw 
 * The `allSuccessfulOrThrow()` method on `Joiner` now returns a list of results rather than a stream of subtasks
 * The `anySuccessfulResultOrThrow()` method on `Joiner` has been renamed to `anySuccessfulOrThrow`
 * The static `open` method of `StructuredTaskScope` that accepted `Joiner` and `Function` now expects `Joiner` and `UnaryOperator`
-* A new method `onTimeOut` has been added to the `Joiner` interface, which allows implementations to return a resul when the timeout expires
+* A new method `onTimeOut` has been added to the `Joiner` interface, which allows implementations to return a result when the timeout expires
 
 === https://openjdk.org/jeps/526[JEP-526: Lazy constants (Second preview)]
 
@@ -129,7 +129,7 @@ Compared to the previous iteration, we see quite a number of changes, so please 
 . The focus of the API has moved to more high-level use cases, so low-level methods such as `orElseSet` and `trySet` have been removed. Meanwhile, the factory methods that take value-computing functions remain.
 . The factory methods for lazy lists and maps have been moved to their respective interfaces to make them easier to discover
 . The API has been simplified by removing the `function` and `intFunction` factory methods given they provided minimal benefits over lazy lists and maps.
-. Null is no longer allowed as a computed value as to improve performance, and this better aligns lazy constants with other contructs in the language such as unmodifiable collections and `ScopedValue`
+. Null is no longer allowed as a computed value as to improve performance, and this better aligns lazy constants with other constructs in the language such as unmodifiable collections and `ScopedValue`
 
 === https://openjdk.org/jeps/529[JEP-529: Vector API (Eleventh incubation)]
 
@@ -200,15 +200,19 @@ Compared to the previous preview in Java 25 through https://openjdk.org/jeps/470
 * The `EncryptedPrivateKeyInfo` class has been expanded with a `getKeyPair` method that allows us to decrypt a `PKCS#8-encoded` text containing a `PublicKey`
 * The `PEMEncoder` and `PEMDecoder` classes now allow us to encrypt and decrypt both `KeyPair` and `PKCS8EncodedKeySpec` objects.
 
-== Thoughts
-
 == Migrating
+
+It's always recommended to move away from deprecated classes and methods as soon as possible, ideally before they're actually removed.
+
+In this release we'll need to pay attention in case we're still using Applets.
 
 === Applets
 
-This API has been removed as part of https://https://openjdk.org/jeps/504[JEP-504], so if you rely on this, you will need to migrate to a different API. For example, the `AWT` API contains several alternatives for the `Applet` class.
+This API has been removed as part of https://openjdk.org/jeps/504[JEP-504], so if you rely on this, you will need to migrate to a different API. For example, the `AWT` API contains several alternatives for the `Applet` class.
 
-If you're casting the result of a `java.net.URLConnection` `getContent()` method to `java.applet.AudioClip` will need to be adapted to the new return type determined by the JDK's built-in content handlers.
+If you're casting the result of a `java.net.URLConnection` `getContent()` method to `java.applet.AudioClip` the code will need to be adapted to the new return type determined by the JDK's built-in content handlers.
+
+== Thoughts
 
 == Resources
 
