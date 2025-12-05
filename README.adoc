@@ -125,7 +125,7 @@ One of the key benefits of stable values is in how they're handled by the JVM. I
 
 Compared to the previous iteration, we see quite a number of changes, so please try out this API and provide feedback on the mailing lists.
 
-. The API has been renamed from `StableValue` to `LazyConstant` as to better capture the intended high-level use case of a single constant value that is initialized lazily.
+. The API has been renamed from `StableValue` to `LazyConstant` to better capture the intended high-level use case of a single constant value that is initialized lazily.
 . The focus of the API has moved to more high-level use cases, so low-level methods such as `orElseSet` and `trySet` have been removed. Meanwhile, the factory methods that take value-computing functions remain.
 . The factory methods for lazy lists and maps have been moved to their respective interfaces to make them easier to discover
 . The API has been simplified by removing the `function` and `intFunction` factory methods given they provided minimal benefits over lazy lists and maps.
