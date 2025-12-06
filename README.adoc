@@ -9,18 +9,30 @@ Java 26 will be released on the 17th of March 2026, and once again it helps move
 [NOTE]
 .Teaser of enhancements
 ====
+Java 26, which is a Short-Term Support release (until September 2026), gathers ten JEPs across different areas that will enhance performance, security, and modern protocol support, all while steadily progressing major, long-term language projects.
 
+With the addition of HTTP/3, significant optimizations for the G1 garbage collector, and a renewed push for program integrity by restricting final field mutation, this release builds directly on the solid foundation of the JDK 25 LTS release.
 ====
 
 == Why Upgrade?
 
-Java 26 offers enterprises:
+* *Free performance*: benefit from improved average application throughput with a leaner G1 garbage collector and faster startup times through ahead-of-time (AoT) object caching that now works with any collector, including the low-latency ZGC.
+
+* *Try out the latest features*: continue working with preview and incubator APIs that are maturing towards becoming permanent fixtures, including Structured Concurrency, pattern matching for primitives, and the high-performance Vector API. Please also remember to provide feedback on the relevant mailing-lists.
+
+* *Enhanced security*: prepare for a future where `final` truly means `final`, enhancing program safety and potential performance. The release also continues the work on post-quantum cryptography with a second preview of a simplified PEM encoding API.
+
+* *Modern protocol support*: stay current with web standards by seamlessly interacting with HTTP/3 servers using the familiar HTTP Client API with minimal code changes.
+
+* *Reduced technical debt*: the final removal of the long-deprecated and obsolete Applet API helps clean up the platform, as it is no longer supported by modern browsers or recent JDK releases
 
 == Core
 
+This release brings HTTP/3 which helps keep Java up-to-date with the latest specifications, and we see nice progress on ongoing JEPs such as the Vector API.
+
 === https://openjdk.org/jeps/500[JEP-500: Prepare to Make Final Mean Final]
 
-When deep reflection's used to mutate final fields, warnings will be issued. The intent is to help developers prepare for future releases where this is restricted to help make our programs safer and maybe faster. (see for reference: https://openjdk.org/jeps/8305968[integrity by default]).
+When deep reflection's used to mutate final fields, warnings will be issued. The intent is to help developers prepare for future releases where this is restricted to help make our programs safer and maybe faster by facilitating further JVM optimizations. (see for reference: https://openjdk.org/jeps/8305968[integrity by default]).
 
 [,console]
 ----
@@ -79,6 +91,12 @@ Additionally, references to the above will be removed from:
 
 The https://en.wikipedia.org/wiki/HTTP/3[HTTP/3 protocol] will now be supported by the https://cr.openjdk.org/~dfuchs/8291976/apidoc.04/api/java.net.http/java/net/http/HttpClient.html[HTTP Client API], allowing us to easily interact with HTTP/3 servers with minimal changes.
 The https://en.wikipedia.org/wiki/QUIC[QUIC protocol] will not receive an API through this JEP, nor a server-side implementation.
+
+[NOTE]
+.HTTP/3
+====
+HTTP/3 uses QUIC over UDP which is a different transport layer, and non-upgradable from HTTP1.1 or HTTP2 connections, which is the reason we need to explicitly select it.
+====
 
 This can be done for all requests by configuring it on the HttpClient object:
 
@@ -139,9 +157,17 @@ Compared to https://openjdk.org/jeps/489[JEP-489: Vector API (Ninth Incubator)] 
 
 Two important changes are the increased usage of auto-vectorization on supporting x64 CPUs and now leveraging the foreign function and memory API to link native mathematical-function libraries.
 
-The developers have confirmed that the API will remain in incubation until project Valhalla enters preview itself so that the API can leverage the expected performance and in-memory representation enhancements.
+The architects have confirmed that the API will remain in incubation until project Valhalla enters preview itself so that the API can leverage the expected performance and in-memory representation enhancements.
+
+[NOTE]
+.Project Valhalla
+====
+Valhalla is not part of JDK 26, but the early-access builds are now available for experimentation.
+====
 
 == HotSpot
+
+This release once again brings us JEPs which provide free performance upgrades just by upgrading!
 
 === https://openjdk.org/jeps/516[JEP-516: Ahead-of-Time Object Caching with Any GC]
 
@@ -159,6 +185,8 @@ The goal is to increase the average application throughput when the default G1 g
 This will be achieved by reducing the synchronization overhead between threads and reducing the size of the injected code for write barriers while making sure that the overall architecture of G1 is maintained.
 
 == Language specification
+
+The language is once again evolving to offer us more flexibility and convenience.
 
 === https://openjdk.org/jeps/530[JEP-530: Primitive Types in Patterns, instanceof, and switch (Fourth Preview)]
 
@@ -179,6 +207,8 @@ Compared to the third preview in JDK 25 through https://openjdk.org/jeps/507[JEP
 This means that a small number of switch constructs that were legal under JEP-507 will be rejected under JEP-530. For instance, a case with a constant label that can be unconditionally converted to the type of a preceding pattern (like a `case 42` after a `case short s`) will now be seen as dominated and cause a compilation error, preventing a potentially unreachable branch of code.
 
 == Security
+
+In this release we see the team working on making sure we can better secure our applications against future, quantum-based computing threats.
 
 === https://openjdk.org/jeps/524[JEP-524: PEM Encodings of Cryptographic Objects (Second preview)]
 
@@ -213,6 +243,8 @@ This API has been removed as part of https://openjdk.org/jeps/504[JEP-504], so i
 If you're casting the result of a `java.net.URLConnection` `getContent()` method to `java.applet.AudioClip` the code will need to be adapted to the new return type determined by the JDK's built-in content handlers.
 
 == Thoughts
+
+Please keep in mind that while this release "only" contains 10 JEPs, it contains https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API] which was one of the largest pull requests in recent years. Furthermore, the first https://jdk.java.net/valhalla/[project Valhalla] early-access build was also released.
 
 == Resources
 
