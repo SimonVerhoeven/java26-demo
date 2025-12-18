@@ -11,20 +11,18 @@ import java.util.Arrays;
 /*
  *   Samples: https://github.com/openjdk/jdk/tree/master/test/micro/org/openjdk/bench/jdk/incubator/vector
  */
-
-
 public class VectorSample {
-    public static void main() {
+    static void main() {
         int[] result = new int[5];
         final var vector1 = new int[]{1, 2, 3, 4, 5};
         final var vector2 = new int[]{100, 200, 300, 400, 500};
 
         scalarAddition(vector1, vector2, result);
-        System.out.println(Arrays.toString(result));
+        IO.println(Arrays.toString(result));
         vectorAddition(vector1, vector2, result);
-        System.out.println(Arrays.toString(result));
+        IO.println(Arrays.toString(result));
         vectorAdditionWithoutSIMDSupport(vector1, vector2, result);
-        System.out.println(Arrays.toString(result));
+        IO.println(Arrays.toString(result));
     }
 
     public static void scalarAddition(int[] a, int[] b, int[] result) {

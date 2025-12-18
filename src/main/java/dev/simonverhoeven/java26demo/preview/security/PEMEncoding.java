@@ -12,7 +12,7 @@ import java.security.PublicKey;
 /// TODO update codebase if there are any more class changes during the review process
 
 public class PEMEncoding {
-    public static void main() throws NoSuchAlgorithmException {
+    static void main() throws NoSuchAlgorithmException {
         // Enable preview features: --enable-preview --release 26
 
         // 1. Generate an EC key pair
@@ -22,24 +22,24 @@ public class PEMEncoding {
         // 2. Encode public key to PEM
         String publicKeyPEM = PEMEncoder.of()
                 .encodeToString(keyPair.getPublic());
-        System.out.println("Public Key PEM:\n" + publicKeyPEM);
+        IO.println("Public Key PEM:\n" + publicKeyPEM);
 
         // 3. Encode a private key to encrypted PEM
         char[] password = "secret".toCharArray();
         String privateKeyPEM = PEMEncoder.of()
                 .withEncryption(password)
                 .encodeToString(keyPair.getPrivate());
-        System.out.println("Encrypted Private Key PEM:\n" + privateKeyPEM);
+        IO.println("Encrypted Private Key PEM:\n" + privateKeyPEM);
 
         // 4. Decode a public key
         PublicKey decodedPubKey = PEMDecoder.of()
                 .decode(publicKeyPEM, PublicKey.class);
-        System.out.println("Decoded Public Key Algo: " + decodedPubKey.getAlgorithm());
+        IO.println("Decoded Public Key Algo: " + decodedPubKey.getAlgorithm());
 
         // 5. Decode encrypted private key
         PrivateKey decodedPrivateKey = PEMDecoder.of()
                 .withDecryption(password)
                 .decode(privateKeyPEM, PrivateKey.class);
-        System.out.println("Decoded Private Key Algo: " + decodedPrivateKey.getAlgorithm());
+        IO.println("Decoded Private Key Algo: " + decodedPrivateKey.getAlgorithm());
     }
 }

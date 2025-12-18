@@ -25,7 +25,7 @@ public class PrimitiveTypes {
         int number = new SecureRandom().nextInt();
 
         if (number instanceof int num) {
-            System.out.println(num);
+            IO.println(num);
         }
     }
 
