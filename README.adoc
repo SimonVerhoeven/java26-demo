@@ -3,6 +3,9 @@
 :toc-placement:
 :toclevels: 3
 :icons: font
+:java-version: 26
+:release-date: 2026-03-17
+:release-type: Short-Term Support (STS)
 
 Java 26 will be released on the 17th of March 2026, and once again, it helps move the language forward.
 
@@ -303,5 +306,6 @@ Some useful resources to dive deeper into the Java ecosystem and stay up to date
 * https://inside.java/[Inside Java] - News updates by Java team members at Oracle
 
 * https://www.jcp.org/[Java Community Process] - the place where people can propose, discuss, and approve new features through a Java Specification Request (JSR)
+
 
 
