@@ -4,21 +4,21 @@
 :toclevels: 3
 :icons: font
 
-Java 26 will be released on the 17th of March 2026, and once again it helps move the language forwards.
+Java 26 will be released on the 17th of March 2026, and once again, it helps move the language forward.
 
 [NOTE]
 .Teaser of enhancements
 ====
 Java 26, which is a Short-Term Support release (until September 2026), gathers ten JEPs across different areas that will enhance performance, security, and modern protocol support, all while steadily progressing major, long-term language projects.
 
-With the addition of HTTP/3, significant optimizations for the G1 garbage collector, and a renewed push for program integrity by restricting final field mutation, this release builds directly on the solid foundation of the JDK 25 LTS release.
+With the addition of HTTP/3, significant optimisations for the G1 garbage collector, and a renewed push for program integrity by restricting final field mutation, this release builds directly on the solid foundation of the JDK 25 LTS release.
 ====
 
 == Why Upgrade?
 
 * *Free performance*: benefit from improved average application throughput with a leaner G1 garbage collector and faster startup times through ahead-of-time (AoT) object caching that now works with any collector, including the low-latency ZGC.
 
-* *Try out the latest features*: continue working with preview and incubator APIs that are maturing towards becoming permanent fixtures, including Structured Concurrency, pattern matching for primitives, and the high-performance Vector API. Please also remember to provide feedback on the relevant mailing-lists.
+* *Try out the latest features*: continue working with preview and incubator APIs that are maturing towards becoming permanent fixtures, including Structured Concurrency, pattern matching for primitives, and the high-performance Vector API. Please also remember to provide feedback on the relevant mailing lists.
 
 * *Enhanced security*: prepare for a future where `final` truly means `final`, enhancing program safety and potential performance. The release also continues the work on post-quantum cryptography with a second preview of a simplified PEM encoding API.
 
@@ -28,11 +28,11 @@ With the addition of HTTP/3, significant optimizations for the G1 garbage collec
 
 == Core
 
-This release brings HTTP/3 which helps keep Java up-to-date with the latest specifications, and we see nice progress on ongoing JEPs such as the Vector API.
+This release brings HTTP/3, which helps keep Java up-to-date with the latest specifications, and we see nice progress on ongoing JEPs such as the Vector API.
 
 === https://openjdk.org/jeps/500[JEP-500: Prepare to Make Final Mean Final]
 
-When deep reflection's used to mutate final fields, warnings will be issued. The intent is to help developers prepare for future releases where this is restricted to help make our programs safer and maybe faster by facilitating further JVM optimizations. (see for reference: https://openjdk.org/jeps/8305968[integrity by default]).
+When deep reflection is used to mutate final fields, warnings will be issued. The intent is to help developers prepare for future releases, where this is restricted to help make our programs safer and maybe faster by facilitating further JVM optimisations. (see for reference: https://openjdk.org/jeps/8305968[integrity by default]).
 
 [,console]
 ----
@@ -43,10 +43,10 @@ WARNING: Mutating final fields will be blocked in a future release unless final 
 
 API developers can avoid the current warnings and future restrictions by selectively enabling final field mutation where it's essential.
 
-To enable final field mutation by any code on the class path regardless of where the field's declared we can use the command-line option: `--enable-final-field-mutation=ALL-UNNAMED`.
+To enable final field mutation by any code on the class path, regardless of where the field is declared, we can use the command-line option: `--enable-final-field-mutation=ALL-UNNAMED`.
 
 In case we want to be a bit more fine-grained, we can restrict it to specific modules by using: `--enable-final-field-mutation=module1, module2`
-Do keep in mind that the to be mutated field must also be open to the code that's performing the deep-reflection.
+Do keep in mind that the to-be-mutated field must also be open to the code that's performing the deep-reflection.
 
 Besides passing in the final-field option directly to the launcher as an option, there are other ways:
 
@@ -63,7 +63,7 @@ We can also control what action the Java runtime takes when an illegal mutation 
 * `--illegal-final-field-mutation=debug` will behave the same as warn, but will also issue a stack trace
 * `--illegal-final-field-mutation=deny` will result in `Field::set` throwing an `IllegalAccessException`. This will become the default in a future release
 
-To help facilitate finding code that mutates final fields it's recommended to use `--illegal-final-field-mutation=debug` and/or use the Java Flight Recorder and look for `jdk.FinalFieldMutation` events.
+To help facilitate finding code that mutates final fields, it's recommended to use `--illegal-final-field-mutation=debug` and/or use the Java Flight Recorder and look for `jdk.FinalFieldMutation` events.
 
 [,console]
 ----
@@ -95,7 +95,7 @@ The https://en.wikipedia.org/wiki/QUIC[QUIC protocol] will not receive an API th
 [NOTE]
 .HTTP/3
 ====
-HTTP/3 uses QUIC over UDP which is a different transport layer, and non-upgradable from HTTP1.1 or HTTP2 connections, which is the reason we need to explicitly select it.
+HTTP/3 uses QUIC over UDP, which is a different transport layer, and non-upgradable from HTTP1.1 or HTTP2 connections, which is the reason we need to explicitly select it.
 ====
 
 This can be done for all requests by configuring it on the HttpClient object:
@@ -128,7 +128,7 @@ By reifying the task-subtask relationship at runtime, structured concurrency mak
 
 This enhancement does not aim to replace existing concurrency constructs like `ExecutorService` or `Future`, but rather to complement them by offering a more structured and reliable alternative for managing concurrent tasks.
 
-Compared to the fifth preview (https://openjdk.org/jeps/505[JEP-505]) which saw several API changes such as the public constructors of `StructuredTaskScope` being replaced with static factory methods, the changes are relatively small this time:
+Compared to the fifth preview (https://openjdk.org/jeps/505[JEP-505]), which saw several API changes such as the public constructors of `StructuredTaskScope` being replaced with static factory methods, the changes are relatively small this time:
 
 * The `allSuccessfulOrThrow()` method on `Joiner` now returns a list of results rather than a stream of subtasks
 * The `anySuccessfulResultOrThrow()` method on `Joiner` has been renamed to `anySuccessfulOrThrow`
@@ -137,23 +137,23 @@ Compared to the fifth preview (https://openjdk.org/jeps/505[JEP-505]) which saw 
 
 === https://openjdk.org/jeps/526[JEP-526: Lazy constants (Second preview)]
 
-This preview API, previously known as https://openjdk.org/jeps/502[JEP-502: Stable values] introduces immutable value holders that are at most initialized once as it will help us move towards deferred immutability through `StableValue` and `StableSupplier`.
+This preview API, previously known as https://openjdk.org/jeps/502[JEP-502: Stable values] introduces immutable value holders that are at most initialized once, as it will help us move towards deferred immutability through `StableValue` and `StableSupplier`.
 
-One of the key benefits of stable values is in how they're handled by the JVM. Internally the stable values use the internal `@Stable` annotation which despite the values being non-final marks them as not changing after the initial updates. Thanks to this, these values benefit from the same constant-folding optimizations as final-fields.
+One of the key benefits of stable values is in how they're handled by the JVM. Internally, the stable values use the internal `@Stable` annotation, which, despite the values being non-final, marks them as not changing after the initial updates. Thanks to this, these values benefit from the same constant-folding optimizations as final-fields.
 
 Compared to the previous iteration, we see quite a number of changes, so please try out this API and provide feedback on the mailing lists.
 
 . The API has been renamed from `StableValue` to `LazyConstant` to better capture the intended high-level use case of a single constant value that is initialized lazily.
 . The focus of the API has moved to more high-level use cases, so low-level methods such as `orElseSet` and `trySet` have been removed. Meanwhile, the factory methods that take value-computing functions remain.
 . The factory methods for lazy lists and maps have been moved to their respective interfaces to make them easier to discover
-. The API has been simplified by removing the `function` and `intFunction` factory methods given they provided minimal benefits over lazy lists and maps.
+. The API has been simplified by removing the `function` and `intFunction` factory methods, given they provided minimal benefits over lazy lists and maps.
 . Null is no longer allowed as a computed value as to improve performance, and this better aligns lazy constants with other constructs in the language such as unmodifiable collections and `ScopedValue`
 
 === https://openjdk.org/jeps/529[JEP-529: Vector API (Eleventh incubation)]
 
-The eleventh iteration of an API for vector computations, this time without any significant changes compared to the previous iteration (https://openjdk.org/jeps/508[JEP-508]) . It aims to be a way to express these in a manner that compiles reliably to optimal vector instructions on supported CPU architectures to achieve better performance than equivalent scalar computations.
+The eleventh iteration of an API for vector computations, this time without any significant changes compared to the previous iteration (https://openjdk.org/jeps/508[JEP-508]). It aims to be a way to express these in a manner that compiles reliably to optimal vector instructions on supported CPU architectures to achieve better performance than equivalent scalar computations.
 
-Compared to https://openjdk.org/jeps/489[JEP-489: Vector API (Ninth Incubator)] there are no API changes.
+Compared to https://openjdk.org/jeps/489[JEP-489: Vector API (Ninth Incubator)], there are no API changes.
 
 Two important changes are the increased usage of auto-vectorization on supporting x64 CPUs and now leveraging the foreign function and memory API to link native mathematical-function libraries.
 
@@ -167,12 +167,12 @@ Valhalla is not part of JDK 26, but the early-access builds are now available fo
 
 == HotSpot
 
-This release once again brings us JEPs which provide free performance upgrades just by upgrading!
+This release once again brings us JEPs, which provide free performance upgrades just by upgrading!
 
 === https://openjdk.org/jeps/516[JEP-516: Ahead-of-Time Object Caching with Any GC]
 
 The ahead-of-time (AoT) cache introduced by https://openjdk.org/projects/leyden/[Project Leyden] will be enhanced so that it can be used with any garbage collector (GC).
-This notably includes the low-latency Z Garbage Collector (ZGC) as previously GC-specific formats were used that were not compatible with ZGC's concurrent collection approach.
+This notably includes the low-latency Z Garbage Collector (ZGC), as previously GC-specific formats were used that were not compatible with ZGC's concurrent collection approach.
 
 To achieve this, a neutral, GC-agnostic format will be used to load cached Java objects sequentially into memory, rather than the current approach of directly mapping them into memory in a GC-specific format. This will enable us to combine ZGC’s low latency with AOT’s fast startup, eliminating the historical tradeoff between startup performance and tail latency.
 
@@ -208,15 +208,15 @@ This means that a small number of switch constructs that were legal under JEP-50
 
 == Security
 
-In this release we see the team working on making sure we can better secure our applications against future, quantum-based computing threats.
+In this release, we see the team working on making sure we can better secure our applications against future, quantum-based computing threats.
 
 === https://openjdk.org/jeps/524[JEP-524: PEM Encodings of Cryptographic Objects (Second preview)]
 
 The second preview of this API which introduces a *preview API* in Java 26 for encoding/decoding cryptographic objects (keys, certificates, CRLs) to/from the PEM (Privacy-Enhanced Mail) format, simplifying a previously manual and error-prone process.
 
-The API centers on `DEREncodable`, `PEMEncoder`, and `PEMDecoder` classes, supporting standards like `PKCS#8` and `X.509`, with built-in encryption for private keys.
+The API centres on `DEREncodable`, `PEMEncoder`, and `PEMDecoder` classes, supporting standards like `PKCS#8` and `X.509`, with built-in encryption for private keys.
 
-The goals include ease of use and interoperability with tools like `OpenSSL` thus addressing a gap highlighted by developer surveys.
+The goals include ease of use and interoperability with tools like `OpenSSL`, thus addressing a gap highlighted by developer surveys.
 
 The design avoids extending legacy APIs such as `KeyFactory` in favour of a dedicated, immutable, and thread-safe solution, though encrypted keys require password handling via `withEncryption()`/`withDecryption()`.
 
@@ -234,13 +234,13 @@ Compared to the previous preview in Java 25 through https://openjdk.org/jeps/470
 
 It's always recommended to move away from deprecated classes and methods as soon as possible, ideally before they're actually removed.
 
-In this release we'll need to pay attention in case we're still using Applets.
+In this release, we'll need to pay attention in case we're still using Applets.
 
 === Applets
 
 This API has been removed as part of https://openjdk.org/jeps/504[JEP-504], so if you rely on this, you will need to migrate to a different API. For example, the `AWT` API contains several alternatives for the `Applet` class.
 
-If you're casting the result of a `java.net.URLConnection` `getContent()` method to `java.applet.AudioClip` the code will need to be adapted to the new return type determined by the JDK's built-in content handlers.
+If you're casting the result of a `java.net.URLConnection` `getContent()` method to `java.applet.AudioClip`, the code will need to be adapted to the new return type determined by the JDK's built-in content handlers.
 
 == Thoughts
 
@@ -252,8 +252,9 @@ Some useful resources to dive deeper into the Java ecosystem and stay up to date
 
 * https://github.com/SimonVerhoeven/java26-demo[GitHub repository] - this article's code
 * https://jdk.java.net/26/release-notes[The release notes] - The official source for all changes, including new features, bug fixes, and deprecations
-* https://javaalmanac.io/jdk/26/[The Java version almanac] - A great resource with details on distributions, and API differences between various releases
+* https://javaalmanac.io/jdk/26/[The Java version almanack] - A great resource with details on distributions, and API differences between various releases
 * https://foojay.io/[Foojay] - A magnificent Java community offering articles, tutorials, and discussions on the latest in the Java ecosystem
 * https://sdkman.io/[SDKman!] - a great tool to manage the installation of various tools and languages
 * https://inside.java/[Inside Java] - News updates by Java team members at Oracle
+
 * https://www.jcp.org/[Java Community Process] - the place where people can propose, discuss, and approve new features through a Java Specification Request (JSR)
