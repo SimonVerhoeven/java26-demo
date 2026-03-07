@@ -167,6 +167,17 @@ The https://en.wikipedia.org/wiki/QUIC[QUIC protocol] will not receive an API th
 HTTP/3 uses QUIC over UDP, which is a different transport layer, and non-upgradable from HTTP1.1 or HTTP2 connections, which is the reason we need to explicitly select it.
 ====
 
+==== Benefits of HTTP/3
+
+HTTP/3 brings several improvements over its predecessors:
+
+* *Reduced connection overhead*: eliminates head-of-line blocking at the transport layer
+* *Faster connection establishment*: combines transport and cryptographic handshakes
+* *Better handling of packet loss*: independent stream handling means loss in one stream doesn't block others
+* *Improved performance on lossy networks*: particularly beneficial for mobile connections
+
+==== Configuration
+
 This can be done for all requests by configuring it on the HttpClient object:
 
 [source,Java]
@@ -184,6 +195,59 @@ HttpRequest request = HttpRequest.newBuilder(URI.create("https://github.com/Simo
                          .version(HttpClient.Version.HTTP_3)
                          .GET().build();
 ----
+
+==== Server support and fallback behaviour
+
+It's important to note that HTTP/3 requires explicit server support. Servers must advertise their HTTP/3 capabilities, typically through the `Alt-Svc` (Alternative Service) HTTP header or DNS records. When you specify `HTTP_3` as the version:
+
+* The client will attempt to connect using HTTP/3 if the server advertises support
+* If HTTP/3 is unavailable or the connection fails, the client will *automatically fall back* to HTTP/2 or HTTP/1.1
+* This fallback mechanism ensures your application remains functional even when HTTP/3 isn't available
+
+[source,Java]
+----
+HttpClient client = HttpClient.newBuilder()
+   .version(HttpClient.Version.HTTP_3)
+   .build();
+
+HttpRequest request = HttpRequest.newBuilder()
+   .uri(URI.create("https://example.com/api"))
+   .build();
+
+// Will use HTTP/3 if available, otherwise falls back to HTTP/2 or HTTP/1.1
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+// You can check which protocol version was actually used
+IO.println("Protocol used: " + response.version());
+----
+
+[NOTE]
+.Testing HTTP/3 Support
+====
+Before deploying HTTP/3 in production, verify that your target servers actually support it. You can check HTTP/3 availability using online tools or by examining the server's `Alt-Svc` headers. Not all CDNs and hosting providers have enabled HTTP/3 support yet.
+====
+
+==== When to use HTTP/3
+
+Consider enabling HTTP/3 when:
+
+* Your application communicates with modern CDNs or cloud services that support HTTP/3 (e.g., Cloudflare, Google Cloud, AWS CloudFront)
+* Your users experience high-latency or lossy network conditions (mobile applications)
+* You need improved performance for API-heavy applications with many concurrent requests
+* You want to future-proof your networking stack
+
+However, keep in mind that:
+
+* Corporate networks or firewalls may block UDP traffic, preventing HTTP/3 connections
+* Some proxy servers don't yet support HTTP/3
+* The automatic fallback ensures compatibility, but you should test in your specific environment
+
+==== Limitations
+
+* No server-side HTTP/3 implementation is provided by this JEP
+* No direct API access to the underlying QUIC protocol
+* UDP port 443 must be accessible (some networks block UDP traffic)
+* Initial connection may require an additional round trip to discover HTTP/3 support via `Alt-Svc`
 
 === https://openjdk.org/jeps/525[JEP-525: Structured Concurrency (Sixth Preview)]
 
