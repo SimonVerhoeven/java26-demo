@@ -31,7 +31,7 @@ To try out Java 26:
 
 == Why Upgrade?
 
-* *Free performance*: benefit from improved average application throughput with a leaner G1 garbage collector and faster startup times through ahead-of-time (AoT) object caching that now works with any collector, including the low-latency ZGC.
+* *Free performance*: benefit from improved average application throughput with a leaner G1 garbage collector and faster startup times through ahead-of-time (AOT) object caching that now works with any collector, including the low-latency ZGC.
 
 * *Try out the latest features*: continue working with preview and incubator APIs that are maturing towards becoming permanent fixtures, including Structured Concurrency, pattern matching for primitives, and the high-performance Vector API. Please also remember to provide feedback on the relevant mailing lists.
 
@@ -335,7 +335,7 @@ This release once again brings us JEPs, which provide free performance upgrades 
 
 === https://openjdk.org/jeps/516[JEP-516: Ahead-of-Time Object Caching with Any GC]
 
-The ahead-of-time (AoT) cache introduced by https://openjdk.org/projects/leyden/[Project Leyden] will be enhanced so that it can be used with any garbage collector (GC).
+The ahead-of-time (AOT) cache introduced by https://openjdk.org/projects/leyden/[Project Leyden] will be enhanced so that it can be used with any garbage collector (GC).
 This notably includes the low-latency Z Garbage Collector (ZGC), as previously GC-specific formats were used that were not compatible with ZGC's concurrent collection approach.
 
 To achieve this, a neutral, GC-agnostic format will be used to load cached Java objects sequentially into memory, rather than the current approach of directly mapping them into memory in a GC-specific format. This will enable us to combine ZGC’s low latency with AOT’s fast startup, eliminating the historical tradeoff between startup performance and tail latency.
