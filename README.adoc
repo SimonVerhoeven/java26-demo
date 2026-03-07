@@ -96,6 +96,13 @@ This release brings HTTP/3, which helps keep Java up-to-date with the latest spe
 
 When deep reflection is used to mutate final fields, warnings will be issued. The intent is to help developers prepare for future releases, where this is restricted to help make our programs safer and maybe faster by facilitating further JVM optimisations. (see for reference: https://openjdk.org/jeps/8305968[integrity by default]).
 
+[WARNING]
+====
+Please pay attention to this JEP if your framework/library heavily depends on reflection such as serialization libraries.
+====
+
+An example of such a warning:
+
 [,console]
 ----
 WARNING: Final field foo in x.Y has been [mutated/unreflected for mutation] by class dev.simonverhoeven.z.caller in module Foo (file:/path/to/somefile.jar)
