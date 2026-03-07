@@ -425,11 +425,11 @@ Some useful resources to dive deeper into the Java ecosystem and stay up to date
 
 * https://github.com/SimonVerhoeven/java26-demo[GitHub repository] - this article's code
 * https://jdk.java.net/26/release-notes[The release notes] - The official source for all changes, including new features, bug fixes, and deprecations
+* https://openjdk.org/groups/quality/[OpenJDK Quality Group] - A group of developers that helps ensure the quality of OpenJDK projects and FOSS in general through initiatives such as promoting the testing of projects on Early Access (EA) builds
 * https://javaalmanac.io/jdk/26/[The Java version almanack] - A great resource with details on distributions, and API differences between various releases
 * https://foojay.io/[Foojay] - A magnificent Java community offering articles, tutorials, and discussions on the latest in the Java ecosystem
 * https://sdkman.io/[SDKman!] - a great tool to manage the installation of various tools and languages
 * https://inside.java/[Inside Java] - News updates by Java team members at Oracle
-
 * https://www.jcp.org/[Java Community Process] - the place where people can propose, discuss, and approve new features through a Java Specification Request (JSR)
 
 
