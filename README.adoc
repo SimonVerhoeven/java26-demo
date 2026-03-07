@@ -340,7 +340,7 @@ This notably includes the low-latency Z Garbage Collector (ZGC), as previously G
 
 To achieve this, a neutral, GC-agnostic format will be used to load cached Java objects sequentially into memory, rather than the current approach of directly mapping them into memory in a GC-specific format. This will enable us to combine ZGC’s low latency with AOT’s fast startup, eliminating the historical tradeoff between startup performance and tail latency.
 
-This change will result in swifter startup and warmup times.
+This change will result in faster startup and warmup times.
 
 === https://openjdk.org/jeps/522[JEP-522: G1 GC: Improve Throughput by Reducing Synchronization]
 
