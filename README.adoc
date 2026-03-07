@@ -7,12 +7,12 @@
 :release-date: 2026-03-17
 :release-type: Short-Term Support (STS)
 
-Java 26 will be released on the 17th of March 2026, and once again, it helps move the language forward.
+Java 26, the next STS release that's part of the six-month release cadence, will be released on the 17th of March 2026, and once again, it helps move the language forward. The previews that are part of this release help shed some light on what we can expect from Java 27 in September 2026.
 
 [NOTE]
 .Teaser of enhancements
 ====
-Java 26, which is a Short-Term Support release (until September 2026), gathers ten JEPs across different areas that will enhance performance, security, and modern protocol support, all while steadily progressing major, long-term language projects.
+Java 26 gathers ten JEPs across different areas that will enhance performance, security, and modern protocol support, all while steadily progressing major, long-term language projects.
 
 With the addition of HTTP/3, significant optimisations for the G1 garbage collector, and a renewed push for program integrity by restricting final field mutation, this release builds directly on the solid foundation of the JDK 25 LTS release.
 ====
@@ -210,6 +210,18 @@ Compared to the previous iteration, we see quite a number of changes, so please 
 . The factory methods for lazy lists and maps have been moved to their respective interfaces to make them easier to discover
 . The API has been simplified by removing the `function` and `intFunction` factory methods, given they provided minimal benefits over lazy lists and maps.
 . Null is no longer allowed as a computed value as to improve performance, and this better aligns lazy constants with other constructs in the language such as unmodifiable collections and `ScopedValue`
+
+For example, let's define a `LazyConstant` that initializes a `MapData` object by loading it only when it's first accessed:
+
+[source,Java]
+----
+private final LazyConstant<MapData> mapData =
+    LazyConstant.of(this::loadMapData);
+
+public Locale getSatelliteLayer() {
+  return mapData.get().getSatelliteLayer(); // <= The lazy constant is accessed here
+}
+----
 
 === https://openjdk.org/jeps/529[JEP-529: Vector API (Eleventh incubation)]
 
