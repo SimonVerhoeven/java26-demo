@@ -370,6 +370,15 @@ Compared to the third preview in JDK 25 through https://openjdk.org/jeps/507[JEP
 
 This means that a small number of switch constructs that were legal under JEP-507 will be rejected under JEP-530. For instance, a case with a constant label that can be unconditionally converted to the type of a preceding pattern (like a `case 42` after a `case short s`) will now be seen as dominated and cause a compilation error, preventing a potentially unreachable branch of code.
 
+[source,java]
+----
+// This was legal in JEP-507 but will fail in JEP-530
+switch (someValue) {
+    case short s -> System.out.println("Short: " + s);
+    case 42 -> System.out.println("Forty-two"); // Now a compile error!
+}
+----
+
 == Security
 
 In this release, we see the team working on making sure we can better secure our applications against future, quantum-based computing threats.
