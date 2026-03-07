@@ -90,7 +90,7 @@ To try out Java 26:
 
 == Core
 
-This release brings HTTP/3, which helps keep Java up-to-date with the latest specifications, and we see nice progress on ongoing JEPs such as the Vector API.
+This release brings HTTP/3, which helps keep Java up to date with the latest specifications, and we see nice progress on ongoing JEPs such as the Vector API.
 
 === https://openjdk.org/jeps/500[JEP-500: Prepare to Make Final Mean Final]
 
