@@ -197,6 +197,27 @@ Compared to the fifth preview (https://openjdk.org/jeps/505[JEP-505]), which saw
 * The static `open` method of `StructuredTaskScope` that accepted `Joiner` and `Function` now expects `Joiner` and `UnaryOperator`
 * A new method `onTimeOut` has been added to the `Joiner` interface, which allows implementations to return a result when the timeout expires
 
+In this example, we're starting three subtasks in parallel with the `StructuredTaskScope` API and waiting until we get the results of all the subtasks to compose the response. If one of the subtasks were to fail, the other, still-running subtasks will be cancelled, and `scope.join()` will throw the exception that happened in the failed subtask.
+
+[source,java]
+----
+try (final var scope = StructuredTaskScope.open()) {
+   Supplier<Person> personTask =
+           scope.fork(() -> findPerson(userId));
+   Supplier<Weather> weatherTask =
+           scope.fork(this::fetchWeather);
+   Supplier<Activity> activityTask =
+           scope.fork(() -> findActivity(userId));
+   scope.join();
+
+   final var person = personTask.get();
+   final var weather = weatherTask.get();
+   final var activity = activityTask.get();
+
+   return new GarderobeSelectionInput(person, weather, activity);
+}
+----
+
 === https://openjdk.org/jeps/526[JEP-526: Lazy constants (Second preview)]
 
 This preview API, previously known as https://openjdk.org/jeps/502[JEP-502: Stable values] introduces immutable value holders that are at most initialized once, as it will help us move towards deferred immutability through `LazyConstant` and `StableSupplier`.

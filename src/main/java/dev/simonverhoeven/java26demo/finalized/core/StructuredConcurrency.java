@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 
 public class StructuredConcurrency {
 
-    public GarderobeSelectionInput composeGarderobeSelectionInput(String userId) {
+    public GarderobeSelectionInput composeGarderobeSelectionInput(String userId) throws InterruptedException {
         try (final var scope = StructuredTaskScope.open()) {
             Supplier<Person> personTask =
                     scope.fork(() -> findPerson(userId));
@@ -22,9 +22,6 @@ public class StructuredConcurrency {
             final var activity = activityTask.get();
 
             return new GarderobeSelectionInput(person, weather, activity);
-
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
 
