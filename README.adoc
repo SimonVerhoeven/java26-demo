@@ -418,13 +418,13 @@ It's always recommended to move away from deprecated classes and methods as soon
 
 In this release, we'll need to pay attention in case we're still using Applets.
 
-=== Applets
+=== https://openjdk.org/jeps/504[JEP-504 - Applet API removal]
 
 This API has been removed as part of https://openjdk.org/jeps/504[JEP-504], so if you rely on this, you will need to migrate to a different API. For example, the `AWT` API contains several alternatives for the `Applet` class.
 
 If you're casting the result of a `java.net.URLConnection` `getContent()` method to `java.applet.AudioClip`, the code will need to be adapted to the new return type determined by the JDK's built-in content handlers.
 
-=== Thread.stop() removal
+=== https://bugs.openjdk.org/browse/JDK-8368237[JDK-8368237 - Thread.stop() removal]
 
 The `Thread.stop()` method has been removed, it was initially deprecated in Java 1.2 which released in December 1998.
 If your code still uses this method, you'll need to refactor to use proper
@@ -446,11 +446,11 @@ thread.interrupt();
 
 Beyond the features delivered through enhancement proposals, there are also some other changes.
 
-=== API documentation dark theme
+=== https://bugs.openjdk.org/browse/JDK-8342705[JDK-8342705 - API documentation dark theme]
 
 Java 26 introduces a dark theme for JavaDoc, making it easier on the eyes for developers who prefer dark mode. This theme can be toggled in the documentation's header.
 
-==== Reduced default initial heap size
+=== https://bugs.openjdk.org/browse/JDK-8348278[JDK-8348278 - Reduced default initial heap size]
 
 The default initial heap size has been reduced, which can lead to lower
 memory footprint for applications that don't require large heaps. This
