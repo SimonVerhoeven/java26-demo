@@ -35,7 +35,9 @@ To try out Java 26:
 
 * *Try out the latest features*: continue working with preview and incubator APIs that are maturing towards becoming permanent fixtures, including Structured Concurrency, pattern matching for primitives, and the high-performance Vector API. Please also remember to provide feedback on the relevant mailing lists.
 
-* *Enhanced security*: prepare for a future where `final` truly means `final`, enhancing program safety and potential performance. The release also continues the work on post-quantum cryptography with a second preview of a simplified PEM encoding API.
+* *Enhanced security and integrity*: prepare for a future where `final` truly
+means `final`, enhancing program safety and potential performance. The release
+also simplifies cryptographic operations with an improved PEM encoding API.
 
 * *Modern protocol support*: stay current with web standards by seamlessly interacting with HTTP/3 servers using the familiar HTTP Client API with minimal code changes.
 
@@ -90,7 +92,7 @@ To try out Java 26:
 
 == Core
 
-This release brings HTTP/3, which helps keep Java up to date with the latest specifications, and we see nice progress on ongoing JEPs such as the Vector API.
+This release brings HTTP/3, which helps keep Java up-to-date with the latest specifications, and we see nice progress on ongoing JEPs such as the Vector API.
 
 === https://openjdk.org/jeps/500[JEP-500: Prepare to Make Final Mean Final]
 
@@ -175,6 +177,7 @@ HTTP/3 brings several improvements over its predecessors:
 * *Faster connection establishment*: combines transport and cryptographic handshakes
 * *Better handling of packet loss*: independent stream handling means loss in one stream doesn't block others
 * *Improved performance on lossy networks*: particularly beneficial for mobile connections
+* *Better connection migration*: maintains connections when switching networks (e.g., WiFi to cellular)
 
 ==== Configuration
 
@@ -218,7 +221,7 @@ HttpRequest request = HttpRequest.newBuilder()
 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
 // You can check which protocol version was actually used
-IO.println("Protocol used: " + response.version());
+System.out.println("Protocol used: " + response.version());
 ----
 
 [NOTE]
@@ -268,18 +271,20 @@ Compared to the fifth preview (https://openjdk.org/jeps/505[JEP-505]), which saw
 * The static `open` method of `StructuredTaskScope` that accepted `Joiner` and `Function` now expects `Joiner` and `UnaryOperator`
 * A new method `onTimeOut` has been added to the `Joiner` interface, which allows implementations to return a result when the timeout expires
 
-In this example, we're starting three subtasks in parallel with the `StructuredTaskScope` API and waiting until we get the results of all the subtasks to compose the response. If one of the subtasks were to fail, the other, still-running subtasks will be cancelled, and `scope.join()` will throw the exception that happened in the failed subtask.
+In this example, we're starting three subtasks in parallel with the `StructuredTaskScope` API and waiting until we get the results of all the subtasks to compose the response. If one of the subtasks were to fail, the other, still-running subtasks will be cancelled, and `scope.throwIfFailed()` will throw the exception that happened in the failed subtask.
 
 [source,java]
 ----
-try (final var scope = StructuredTaskScope.open()) {
+try (final var scope = new StructuredTaskScope.ShutdownOnFailure()) {
    Supplier<Person> personTask =
            scope.fork(() -> findPerson(userId));
    Supplier<Weather> weatherTask =
            scope.fork(this::fetchWeather);
    Supplier<Activity> activityTask =
            scope.fork(() -> findActivity(userId));
+
    scope.join();
+   scope.throwIfFailed();
 
    final var person = personTask.get();
    final var weather = weatherTask.get();
@@ -308,10 +313,11 @@ For example, let's define a `LazyConstant` that initializes a `MapData` object b
 [source,Java]
 ----
 private final LazyConstant<MapData> mapData =
-    LazyConstant.of(this::loadMapData);
+    LazyConstant.of(this::loadMapData); // <= not initialized yet
 
 public Locale getSatelliteLayer() {
-  return mapData.get().getSatelliteLayer(); // <= The lazy constant is accessed here
+   // The first call initializes via loadMapData(); subsequent calls reuse the cached value
+   return mapData.get().getSatelliteLayer();
 }
 ----
 
@@ -319,7 +325,8 @@ public Locale getSatelliteLayer() {
 
 The eleventh iteration of an API for vector computations, this time without any significant changes compared to the previous iteration (https://openjdk.org/jeps/508[JEP-508]). It aims to be a way to express these in a manner that compiles reliably to optimal vector instructions on supported CPU architectures to achieve better performance than equivalent scalar computations.
 
-Two important changes are the increased usage of auto-vectorization on supporting x64 and AArch64 architectures, and now leveraging the foreign function and memory API to link native mathematical-function libraries.
+Two important changes are the increased usage of auto-vectorization on
+supporting x64 (AVX2/AVX-512) and AArch64 (NEON/SVE) architectures, and now leveraging the foreign function and memory API to link native mathematical-function libraries.
 
 The architects have confirmed that the API will remain in incubation until project Valhalla enters preview itself so that the API can leverage the expected performance and in-memory representation enhancements. Hence, why it's at its 11th incubation.
 
@@ -381,7 +388,9 @@ switch (someValue) {
 
 == Security
 
-In this release, we see the team working on making sure we can better secure our applications against future, quantum-based computing threats.
+In this release, we see ongoing work to improve cryptographic tooling
+with a simplified API for PEM encoding, making it easier to work with
+keys, certificates, and other cryptographic objects.
 
 === https://openjdk.org/jeps/524[JEP-524: PEM Encodings of Cryptographic Objects (Second preview)]
 

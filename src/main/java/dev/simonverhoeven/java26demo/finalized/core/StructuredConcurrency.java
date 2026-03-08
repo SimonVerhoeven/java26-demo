@@ -8,14 +8,16 @@ import java.util.function.Supplier;
 public class StructuredConcurrency {
 
     public GarderobeSelectionInput composeGarderobeSelectionInput(String userId) throws InterruptedException {
-        try (final var scope = StructuredTaskScope.open()) {
+        try (final var scope = new StructuredTaskScope.ShutdownOnFailure()) {
             Supplier<Person> personTask =
                     scope.fork(() -> findPerson(userId));
             Supplier<Weather> weatherTask =
                     scope.fork(this::fetchWeather);
             Supplier<Activity> activityTask =
                     scope.fork(() -> findActivity(userId));
+
             scope.join();
+            scope.throwIfFailed();
 
             final var person = personTask.get();
             final var weather = weatherTask.get();
