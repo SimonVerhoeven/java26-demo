@@ -446,6 +446,13 @@ thread.interrupt();
 
 Beyond the features delivered through enhancement proposals, there are also some other changes.
 
+=== https://bugs.openjdk.org/browse/JDK-8346944[JDK-8346944 - Unicode 17 support]
+
+Java 26 adds support for https://unicode.org/versions/Unicode17.0.0/[Unicode 17.0], which includes new characters, scripts, and emoji.
+This ensures Java stays current with the latest text encoding standards.
+
+This release includes 4,803 new characters, of which 7 new emoji code points, 4 new scripts and technical fixes.
+
 === https://bugs.openjdk.org/browse/JDK-8342705[JDK-8342705 - API documentation dark theme]
 
 Java 26 introduces a dark theme for JavaDoc, making it easier on the eyes for developers who prefer dark mode. This theme can be toggled in the documentation's header.
