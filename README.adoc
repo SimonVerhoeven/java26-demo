@@ -459,9 +459,9 @@ Java 26 introduces a dark theme for JavaDoc, making it easier on the eyes for de
 
 === https://bugs.openjdk.org/browse/JDK-8348278[JDK-8348278 - Reduced default initial heap size]
 
-The default initial heap size has been reduced, which can lead to lower
-memory footprint for applications that don't require large heaps. This
-particularly benefits containerized applications and microservices.
+The default initial heap size has been reduced when neither `Xms` nor `-XX:InitialRAMPercentage` has been used. Prior to this release the heap was set to 1/64th of the physical RAM by default, as of this release this has been changed to 1/500th. To put this into context, on a 32 GiB this resulted in a 512 MiB heap, whereas as of this release it will be 64 MiB.
+
+Not only does this represent a significant reduction in the memory consumption of our applications, it can also speed up the startup of our applications given the initial data structure the Garbage Collector has to create will be smaller.
 
 == Thoughts
 
