@@ -442,6 +442,20 @@ Use:
 thread.interrupt();
 ----
 
+== Other changes
+
+Beyond the features delivered through enhancement proposals, there are also some other changes.
+
+=== API documentation dark theme
+
+Java 26 introduces a dark theme for JavaDoc, making it easier on the eyes for developers who prefer dark mode. This theme can be toggled in the documentation's header.
+
+==== Reduced default initial heap size
+
+The default initial heap size has been reduced, which can lead to lower
+memory footprint for applications that don't require large heaps. This
+particularly benefits containerized applications and microservices.
+
 == Thoughts
 
 Please keep in mind that while this release "only" contains 10 JEPs, it contains https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API] which was one of the largest pull requests in recent years. Furthermore, the first https://jdk.java.net/valhalla/[project Valhalla] early-access build was also released.
