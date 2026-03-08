@@ -424,6 +424,24 @@ This API has been removed as part of https://openjdk.org/jeps/504[JEP-504], so i
 
 If you're casting the result of a `java.net.URLConnection` `getContent()` method to `java.applet.AudioClip`, the code will need to be adapted to the new return type determined by the JDK's built-in content handlers.
 
+=== Thread.stop() removal
+
+The `Thread.stop()` method has been removed, it was initially deprecated in Java 1.2 which released in December 1998.
+If your code still uses this method, you'll need to refactor to use proper
+thread interruption mechanisms.
+
+Instead of:
+[source,java]
+----
+thread.stop();
+----
+
+Use:
+[source,java]
+----
+thread.interrupt();
+----
+
 == Thoughts
 
 Please keep in mind that while this release "only" contains 10 JEPs, it contains https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API] which was one of the largest pull requests in recent years. Furthermore, the first https://jdk.java.net/valhalla/[project Valhalla] early-access build was also released.
