@@ -446,6 +446,25 @@ thread.interrupt();
 
 Beyond the features delivered through enhancement proposals, there are also some other changes.
 
+=== https://bugs.openjdk.org/browse/JDK-8329829[JDK-8329829 - HttpClient: Add a BodyPublishers.ofFileChannel method]
+
+We can now stream files through `FileChannel` to a `HttpRequest`, which means we no longer need to load a file fully in memory beforehand. This is quite an improvement, especially when dealing with large files.
+
+[source,java]
+----
+try (FileChannel fileChannel =
+        FileChannel.open(Path.of("layer.tga"), StandardOpenOption.READ);
+    HttpClient client = HttpClient.newHttpClient()) {
+
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create("https://www.simonverhoeven.dev/upload"))
+        .POST(BodyPublishers.ofFileChannel(fileChannel, 0, fileChannel.size()))
+        .build();
+
+    HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
+}
+----
+
 === https://bugs.openjdk.org/browse/JDK-8346944[JDK-8346944 - Unicode 17 support]
 
 Java 26 adds support for https://unicode.org/versions/Unicode17.0.0/[Unicode 17.0], which includes new characters, scripts, and emoji.
