@@ -21,13 +21,20 @@ With the addition of HTTP/3, significant optimisations for the G1 garbage collec
 
 To try out Java 26:
 
-1. Download from https://jdk.java.net/26/[jdk.java.net/26]
-2. For preview features, compile and run with `--enable-preview`:
-   [source,console]
-   ----
-   javac --enable-preview --release 26 YourFile.java
-   java --enable-preview YourFile
-   ----
+. Install it by:
+.. Download from https://jdk.java.net/26/[jdk.java.net/26] or use a package manager:
+.. Using a package manager:
+... SDKman: `sdk install java 26-open`
+... Homebrew (macOS): `brew install openjdk@26`
+... Chocolatey (Windows): `choco install openjdk26`
+
+. For preview features, compile and run with `--enable-preview`:
+
+[source,console]
+----
+javac --enable-preview --release 26 YourFile.java
+java --enable-preview YourFile
+----
 
 == Why Upgrade?
 
