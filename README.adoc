@@ -463,6 +463,18 @@ The default initial heap size has been reduced when neither `Xms` nor `-XX:Initi
 
 Not only does this represent a significant reduction in the memory consumption of our applications, it can also speed up the startup of our applications given the initial data structure the Garbage Collector has to create will be smaller.
 
+=== https://bugs.openjdk.org/browse/JDK-8369238[JDK-8369238 - Allow virtual thread preemption on some common class initialization paths]
+
+This update changes how the JVM manages these waiting states. By leveraging the same mechanisms used for `ObjectMonitor` (the internal logic behind synchronized blocks), the JVM can now preempt or unmount virtual threads that are waiting for class initialisation. Thus, further reducing when thread pinning might occur.
+
+This means:
+
+* Improved Robustness: Virtual threads waiting on invokestatic, new, or static field access will no longer hog carrier threads.
+
+* Deadlock mitigation: The specific "pathological" deadlock described above is largely eliminated because the carrier thread is freed to do other work—such as finishing the very initialisation the virtual thread is waiting for.
+
+* Seamless scalability: You no longer need to worry as much about "heavy" class initialisers (static blocks that take a long time or perform complex logic) causing a ripple effect that stalls your entire virtual thread pool.
+
 == Thoughts
 
 Please keep in mind that while this release "only" contains 10 JEPs, it contains https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API] which was one of the largest pull requests in recent years. Furthermore, the first https://jdk.java.net/valhalla/[project Valhalla] early-access build was also released.
