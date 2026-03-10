@@ -507,6 +507,16 @@ This means:
 
 * Seamless scalability: You no longer need to worry as much about "heavy" class initialisers (static blocks that take a long time or perform complex logic) causing a ripple effect that stalls your entire virtual thread pool.
 
+=== https://bugs.openjdk.org/browse/JDK-8369432[JDK-8369432 - Add Support for JDBC 4.5 MR]
+
+This update to the specification will add enhan:
+
+* Deprecate `SQLPermission` for removal
+* Enhance the `Blob`/`Clob`/`Array`/`SQLXML`/`NClob` interfaces to extend/support AutoClosable
+* Add the SQL types `DECFLOAT`, `JSON` to `Types.Java` and `JDBCType.java`
+* Add the quoted identifier methods that were added to the `Statement` interface in JDK 9 to the `Connection` interface with the exact same wording and methods
+* Clarify the `Timestamp::hashCode` method which incorrectly indicates that nanos are not used when calculating the hash
+
 == Thoughts
 
 Please keep in mind that while this release "only" contains 10 JEPs, it contains https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API] which was one of the largest pull requests in recent years. Furthermore, the first https://jdk.java.net/valhalla/[project Valhalla] early-access build was also released.
