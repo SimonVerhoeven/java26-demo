@@ -489,6 +489,12 @@ The default initial heap size has been reduced when neither `Xms` nor `-XX:Initi
 
 Not only does this represent a significant reduction in the memory consumption of our applications, it can also speed up the startup of our applications given the initial data structure the Garbage Collector has to create will be smaller.
 
+=== https://bugs.openjdk.org/browse/JDK-8354469[JDK-8354469 - Enhanced keytool password handling when output is redirected]
+
+This command reads passwords from the system console to avoid them being displayed on the screen.
+However, in previous releases, this did not work when the input or output stream were redirected.
+As of this release, the password will no longer be displayed on the screen even if the standard output stream is redirected. This improvement has also been made to the `jarsigner` command and the JAAS `TextCallbackHandler` API.
+
 === https://bugs.openjdk.org/browse/JDK-8369238[JDK-8369238 - Allow virtual thread preemption on some common class initialization paths]
 
 This update changes how the JVM manages these waiting states. By leveraging the same mechanisms used for `ObjectMonitor` (the internal logic behind synchronized blocks), the JVM can now preempt or unmount virtual threads that are waiting for class initialisation. Thus, further reducing when thread pinning might occur.
