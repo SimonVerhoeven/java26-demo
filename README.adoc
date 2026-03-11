@@ -517,6 +517,25 @@ This command reads passwords from the system console to avoid them being display
 However, in previous releases, this did not work when the input or output stream were redirected.
 As of this release, the password will no longer be displayed on the screen even if the standard output stream is redirected. This improvement has also been made to the `jarsigner` command and the JAAS `TextCallbackHandler` API.
 
+=== https://bugs.openjdk.org/browse/JDK-8354548[JDK-8354548 - Update CLDR to Version 48.0]
+
+This updates the Unicode Common Locale Data Repository (CLDR) in the JDK to https://cldr.unicode.org/downloads/cldr-48[CLDR version 48].
+
+This entails:
+
+
+* CLDR-16439 zone alias South_Pole was moved to McMurdo, so remove it from Auckland (#4592)
+* CLDR-16665 key/type core values (#4577)
+* CLDR-13688 Correct the first day of week for Iceland from Monday to Sunday (#4379)
+* CLDR-18464 Add a Before Hijrah era to the Islamic calendars (#4581)
+* CLDR-18572 Add more European Englishes (#4645)
+* CLDR-18253 Add en_JP (#4634)
+* CLDR-18603 Add GyM, GyMEd availableFormats to root, en (#4679)
+* CLDR-18538 root,en: change H patterns without m[s] to add literal 'h' (#4708)
+* CLDR-9814 Recover Turkey metazone names (#4741)
+* CLDR-18788 Fix Russian metazones (#4833)
+* CLDR-13542 Fix Swiss grouping separator (#5019)
+
 === https://bugs.openjdk.org/browse/JDK-8364361[JDK-8364361 - java.lang.Process should implement Closeable]
 
 When a process launched via ProcessBuilder is torn down, the caller bears responsibility for closing its streams and ensuring the process terminates properly. Introducing a `Process.close()` method would provide a straightforward and intuitive means of ensuring all streams are closed and the process is terminated.
