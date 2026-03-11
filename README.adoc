@@ -452,6 +452,7 @@ thread.interrupt();
 == Other changes
 
 Beyond the features delivered through enhancement proposals, there are also some other changes.
+Note, this is just a small subset which piqued my interest.
 
 === https://bugs.openjdk.org/browse/JDK-8329829[JDK-8329829 - HttpClient: Add a BodyPublishers.ofFileChannel method]
 
@@ -477,7 +478,7 @@ try (FileChannel fileChannel =
 Java 26 adds support for https://unicode.org/versions/Unicode17.0.0/[Unicode 17.0], which includes new characters, scripts, and emoji.
 This ensures Java stays current with the latest text encoding standards.
 
-This release includes 4,803 new characters, of which 7 new emoji code points, 4 new scripts and technical fixes.
+This release includes 4,803 new characters, of which 7 new emoji code points, 4 new scripts, and technical fixes.
 
 === https://bugs.openjdk.org/browse/JDK-8342705[JDK-8342705 - API documentation dark theme]
 
@@ -521,6 +522,10 @@ This update to the specification will add enhan:
 
 Please keep in mind that while this release "only" contains 10 JEPs, it contains https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API] which was one of the largest pull requests in recent years. Furthermore, the first https://jdk.java.net/valhalla/[project Valhalla] early-access build was also released.
 
+There are other reasons to upgrade than purely new functionality, such as the reduced initial heap size, pinning prevention, Unicode 17, security updates, and so on.
+
+It is always nice to benefit from these free enhancements.
+
 == Resources
 
 Some useful resources to dive deeper into the Java ecosystem and stay up to date are:
@@ -534,6 +539,10 @@ Some useful resources to dive deeper into the Java ecosystem and stay up to date
 * https://inside.java/[Inside Java] - News updates by Java team members at Oracle
 * https://www.jcp.org/[Java Community Process] - the place where people can propose, discuss, and approve new features through a Java Specification Request (JSR)
 
-
+[width="100%", cols="1", frame=top, grid=none]
+|===
+^| © 2026 Simon Verhoeven. Licensed under the MIT License. +
+_Last updated: March 11, 2026_
+|===
 
 
