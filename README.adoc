@@ -1,8 +1,29 @@
 = Java 26
-:toc:
-:toc-placement:
+Simon Verhoeven <verhoeven.simon@gmail.com>
+v1.0, 2026-03-11
+:doctype: article
+:encoding: utf-8
+:lang: en
+:toc: left
 :toclevels: 3
+:toc-title: Table of Contents
+:sectanchors:
+:sectlinks:
+:sectnums:
 :icons: font
+:source-highlighter: highlight.js
+:highlightjs-theme: a11y-dark
+:stem:
+:xrefstyle: short
+:experimental:
+:java-version: 26
+:release-date: 2026-03-17
+:release-type: Short-Term Support (STS)
+:description: A comprehensive overview of Java 26, covering new JEPs including HTTP/3 support, G1 GC improvements, structured concurrency, primitive types in patterns, ahead-of-time object caching, and security enhancements.
+:keywords: java 26, jdk 26, http/3, structured concurrency, vector api, g1 gc, lazy constants, primitive patterns, jep, openjdk
+:copyright: Copyright (c) 2026 Simon Verhoeven
+:license: MIT License
+:license-url: https://opensource.org/licenses/MIT
 :java-version: 26
 :release-date: 2026-03-17
 :release-type: Short-Term Support (STS)
