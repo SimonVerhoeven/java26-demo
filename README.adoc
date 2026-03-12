@@ -565,6 +565,10 @@ The try-with-resources statement is commonly used to open streams whilst guarant
 
 The `close()` method would perform the following actions: close each associated stream and destroy the process should it not have already terminated.
 
+=== https://bugs.openjdk.org/browse/JDK-8366575[JDK-8366575 - Remove SDP support]
+
+The support for Sockets Direct Protocol, a protocol that has been obsolete for over a decade and cannot be used on modern systems, has been removed from the JDK.
+
 === https://bugs.openjdk.org/browse/JDK-8369238[JDK-8369238 - Allow virtual thread preemption on some common class initialization paths]
 
 This update changes how the JVM manages these waiting states. By leveraging the same mechanisms used for `ObjectMonitor` (the internal logic behind synchronized blocks), the JVM can now preempt or unmount virtual threads that are waiting for class initialisation. Thus, further reducing when thread pinning might occur.
