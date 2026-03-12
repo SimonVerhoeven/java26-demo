@@ -473,7 +473,11 @@ thread.interrupt();
 == Other changes
 
 Beyond the features delivered through enhancement proposals, there are also some other changes.
-Note, this is just a small subset which piqued my interest.
+
+[NOTE]
+====
+This is just a small subset which piqued my interest.
+====
 
 === https://bugs.openjdk.org/browse/JDK-8329829[JDK-8329829 - HttpClient: Add a BodyPublishers.ofFileChannel method]
 
@@ -522,7 +526,6 @@ As of this release, the password will no longer be displayed on the screen even 
 This updates the Unicode Common Locale Data Repository (CLDR) in the JDK to https://cldr.unicode.org/downloads/cldr-48[CLDR version 48].
 
 This entails:
-
 
 * CLDR-16439 zone alias South_Pole was moved to McMurdo, so remove it from Auckland (#4592)
 * CLDR-16665 key/type core values (#4577)
