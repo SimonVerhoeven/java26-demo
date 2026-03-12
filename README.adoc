@@ -539,6 +539,24 @@ This entails:
 * CLDR-18788 Fix Russian metazones (#4833)
 * CLDR-13542 Fix Swiss grouping separator (#5019)
 
+=== https://bugs.openjdk.org/browse/JDK-8362637[Convert java.nio.ByteOrder to an enum]
+
+This class, which predates the addition of enum to Java has been converted to an enum:
+
+[source,java]
+----
+public enum ByteOrder {
+    LITTLE_ENDIAN,
+    BIG_ENDIAN;
+
+    private static final ByteOrder NATIVE_ORDER = Unsafe.getUnsafe().isBigEndian() ? BIG_ENDIAN : LITTLE_ENDIAN;
+
+    public static ByteOrder nativeOrder() {
+        return NATIVE_ORDER;
+    }
+}
+----
+
 === https://bugs.openjdk.org/browse/JDK-8364361[JDK-8364361 - java.lang.Process should implement Closeable]
 
 When a process launched via ProcessBuilder is torn down, the caller bears responsibility for closing its streams and ensuring the process terminates properly. Introducing a `Process.close()` method would provide a straightforward and intuitive means of ensuring all streams are closed and the process is terminated.
