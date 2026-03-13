@@ -1,6 +1,6 @@
 = Java 26
 Simon Verhoeven <verhoeven.simon@gmail.com>
-v1.0, 2026-03-11
+v1.0, 2026-03-13
 :doctype: article
 :encoding: utf-8
 :lang: en
@@ -498,6 +498,77 @@ try (FileChannel fileChannel =
 }
 ----
 
+=== https://bugs.openjdk.org/browse/JDK-8334015[JDK-8334015 - Add support for UUID Version 7 defined in RFC 9562]
+
+Java 26 introduces native support for UUID version 7 (UUIDv7), a time-ordered UUID format standardised in https://datatracker.ietf.org/doc/html/rfc9562[RFC 9562]. This new variant embeds a Unix Epoch timestamp (with millisecond precision) in its most significant bits, whilst maintaining randomness in the remaining bits to ensure uniqueness. This makes it particularly well-suited for database applications where insertion order and efficient indexing are important considerations.
+
+==== Creating and inspecting UUIDv7
+
+The new `UUID.ofEpochMillis(long)` method allows us to create a UUIDv7 from a timestamp:
+
+[source,java]
+----
+// Create a UUIDv7 from the current timestamp
+UUID uuid = UUID.ofEpochMillis(System.currentTimeMillis());
+System.out.println(uuid); // e.g., 018e9e35-97af-7290-8000-123456789abc
+
+// Each call generates a unique UUID, even with the same timestamp
+UUID another = UUID.ofEpochMillis(System.currentTimeMillis());
+System.out.println(uuid.equals(another)); // false - randomness ensures uniqueness
+
+// Retrieve the embedded timestamp
+long timestamp = uuid.getEpochMillis();
+Instant creationTime = Instant.ofEpochMilli(timestamp);
+System.out.println("UUID created at: " + creationTime);
+
+// Verify the UUID version
+System.out.println("Version: " + uuid.version()); // 7
+----
+
+==== Chronological sorting
+
+UUIDv7's time-ordered nature enables natural chronological sorting:
+
+[source,java]
+----
+UUID earlier = UUID.ofEpochMillis(Instant.parse("2026-03-17T09:00:00Z").toEpochMilli());
+UUID later = UUID.ofEpochMillis(Instant.parse("2026-03-17T10:00:00Z").toEpochMilli());
+
+System.out.println(earlier.compareTo(later) < 0); // true - naturally time-ordered
+
+// This makes UUIDv7 ideal for:
+// - Range queries (WHERE id BETWEEN ? AND ?)
+// - Pagination with cursor-based approaches
+// - Time-based partitioning
+----
+
+==== Choosing between UUID versions
+
+UUIDv7 *complements* the existing v4 format rather than replacing it. The choice between them depends on your requirements:
+
+* Use *v4* if: simplicity, maximum randomness, and broad compatibility are required, and insertion order or time ordering is unimportant.
+* Use *v7* if: you need insertion order, lexicographical sorting, more efficient database indexing, or want to embed creation time in the identifier.
+
+[NOTE]
+.Backward Compatibility
+====
+UUIDv7 is fully compatible with existing UUID infrastructure. All standard UUID methods (`toString()`, `fromString()`, etc.) work seamlessly, and UUIDv7 can be stored in existing UUID database columns without schema changes.
+====
+
+[NOTE]
+.Database Performance Benefits
+====
+UUIDv7's time-ordered nature can significantly reduce database index fragmentation compared to random UUIDs, leading to better insertion performance in high-throughput scenarios. In databases with B-tree indices (such as PostgreSQL, MySQL InnoDB, and Oracle Database), time-ordered UUIDs substantially reduce index page splits compared to random UUIDs in sequential insertion scenarios, leading to both improved write throughput and reduced storage overhead. Actual performance gains depend on workload patterns, database configuration, and hardware characteristics.
+
+This makes UUIDv7 particularly valuable for:
+
+* Logging systems with high volume writes
+* Event sourcing applications
+* Time-series data storage
+* Distributed systems requiring ordered identifiers
+* Applications where B-tree index efficiency is critical
+====
+
 === https://bugs.openjdk.org/browse/JDK-8346944[JDK-8346944 - Unicode 17 support]
 
 Java 26 adds support for https://unicode.org/versions/Unicode17.0.0/[Unicode 17.0], which includes new characters, scripts, and emoji.
@@ -616,7 +687,7 @@ This update to the specification will add enhan:
 
 Whilst this release encompasses ten JEPs, it's worth noting that it includes https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API], which represents one of the most substantial pull requests in recent years. Additionally, the first https://jdk.java.net/valhalla/[project Valhalla] early-access build has been made available for experimentation.
 
-Beyond the headline features, there are numerous compelling reasons to upgrade. Performance improvements such as the reduced initial heap size and enhanced virtual thread preemption, alongside Unicode 17 support and ongoing security enhancements, all contribute to a more robust platform.
+Beyond the headline features, there are numerous compelling reasons to upgrade. Performance improvements such as the reduced initial heap size and enhanced virtual thread preemption, alongside Unicode 17 support, type 7 UUID creation, and ongoing security enhancements, all contribute to a more robust platform.
 
 This release also resolves a notable issue where inner classes of type parameters were being emitted as raw types (https://bugs.openjdk.org/browse/JDK-8357653[JDK-8357653]).
 
@@ -643,7 +714,7 @@ Some useful resources to dive deeper into the Java ecosystem and stay up to date
 [width="100%", cols="1", frame=top, grid=none]
 |===
 ^| © 2026 Simon Verhoeven. Licensed under the MIT License. +
-_Last updated: March 11, 2026_
+_Last updated: March 13, 2026_
 |===
 
 
