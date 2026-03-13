@@ -612,15 +612,20 @@ This update to the specification will add enhan:
 * Add the quoted identifier methods that were added to the `Statement` interface in JDK 9 to the `Connection` interface with the exact same wording and methods
 * Clarify the `Timestamp::hashCode` method which incorrectly indicates that nanos are not used when calculating the hash
 
-== Thoughts
+== Closing thoughts
 
-Please keep in mind that while this release "only" contains 10 JEPs, it contains https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API] which was one of the largest pull requests in recent years. Furthermore, the first https://jdk.java.net/valhalla/[project Valhalla] early-access build was also released.
+Whilst this release encompasses ten JEPs, it's worth noting that it includes https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API], which represents one of the most substantial pull requests in recent years. Additionally, the first https://jdk.java.net/valhalla/[project Valhalla] early-access build has been made available for experimentation.
 
-There are other reasons to upgrade than purely new functionality, such as the reduced initial heap size, pinning prevention, Unicode 17, security updates, and so on.
+Beyond the headline features, there are numerous compelling reasons to upgrade. Performance improvements such as the reduced initial heap size and enhanced virtual thread preemption, alongside Unicode 17 support and ongoing security enhancements, all contribute to a more robust platform.
 
-Additionally, a notable issue where inner classes of type parameters were being emitted as raw types has been resolved (JDK-8357653).
+This release also resolves a notable issue where inner classes of type parameters were being emitted as raw types (https://bugs.openjdk.org/browse/JDK-8357653[JDK-8357653]).
 
-It is always nice to benefit from these free enhancements.
+Furthermore, two new https://dev.java/learn/jvm/jfr/[Java Flight Recorder] events have been introduced to provide deeper insights into application behaviour:
+
+* `StringDeduplication` - monitors string deduplication activity
+* `FinalFieldMutation` - tracks final field mutation attempts
+
+These enhancements, whilst perhaps less prominent than the major JEPs, collectively provide tangible benefits simply through upgrading to Java 26.
 
 == Resources
 
