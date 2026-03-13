@@ -539,9 +539,30 @@ This entails:
 * CLDR-18788 Fix Russian metazones (#4833)
 * CLDR-13542 Fix Swiss grouping separator (#5019)
 
-=== https://bugs.openjdk.org/browse/JDK-8362637[Convert java.nio.ByteOrder to an enum]
+=== https://bugs.openjdk.org/browse/JDK-8357653[JDK-8357653 - Inner classes of type parameters emitted as raw types in signatures]
 
-This class, which predates the addition of enum to Java has been converted to an enum:
+This resolves an issue where `javac` false believes that the inner class of type parameters returns just `Object`. Now the correct type is being emitted.
+
+[source,java]
+----
+class Demonstration {
+    static abstract class Getters<T> {
+        abstract class Getter {
+            abstract T get();
+        }
+    }
+
+    static class GettersUsage<T, G extends Getters<T>> {
+        public T test(G.Getter getter) {
+            return getter.get();
+        }
+    }
+}
+----
+
+=== https://bugs.openjdk.org/browse/JDK-8362637[JDK-8362637 - Convert java.nio.ByteOrder to an enum]
+
+This class, which predates the addition of enum to Java, has been converted to an enum:
 
 [source,java]
 ----
@@ -596,6 +617,8 @@ This update to the specification will add enhan:
 Please keep in mind that while this release "only" contains 10 JEPs, it contains https://openjdk.org/jeps/517[JEP-517: HTTP/3 for the HTTP Client API] which was one of the largest pull requests in recent years. Furthermore, the first https://jdk.java.net/valhalla/[project Valhalla] early-access build was also released.
 
 There are other reasons to upgrade than purely new functionality, such as the reduced initial heap size, pinning prevention, Unicode 17, security updates, and so on.
+
+Additionally, a notable issue where inner classes of type parameters were being emitted as raw types has been resolved (JDK-8357653).
 
 It is always nice to benefit from these free enhancements.
 
