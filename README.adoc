@@ -94,7 +94,7 @@ also simplifies cryptographic operations with an improved PEM encoding API.
 |Final
 
 |https://openjdk.org/jeps/522[522]
-|G1 GC: Improve Throughput by Reducing Synchronization
+|G1 GC: Improve throughput by reducing synchronization
 |Final
 
 |https://openjdk.org/jeps/524[524]
@@ -128,7 +128,7 @@ When deep reflection is used to mutate final fields, warnings will be issued. Th
 
 [WARNING]
 ====
-Please pay attention to this JEP if your framework/library heavily depends on reflection such as serialization libraries.
+Please pay attention to this JEP if your framework/library heavily depends on reflection, such as serialisation libraries.
 ====
 
 An example of such a warning:
@@ -152,7 +152,7 @@ Besides passing in the final-field option directly to the launcher as an option,
 * using an argument-file
 * setting `JDK_JAVA_OPTIONS`
 * adding it to the manifest of an executable JAR
-* through the `JNI Invocation API` passing the option to an embedded JVM that it creates
+* through the `JNI Invocation API`, passing the option to an embedded JVM that it creates
 * passing it to `jlink` when creating a custom Java runtime
 
 We can also control what action the Java runtime takes when an illegal mutation is attempted:
@@ -211,7 +211,7 @@ HTTP/3 brings several improvements over its predecessors:
 
 This can be done for all requests by configuring it on the HttpClient object:
 
-[source,Java]
+[source,java]
 ----
 HttpClient client = HttpClient.newBuilder()
    .version(HttpClient.Version.HTTP_3)
@@ -220,7 +220,7 @@ HttpClient client = HttpClient.newBuilder()
 
 Or on a request basis:
 
-[source,Java]
+[source,java]
 ----
 HttpRequest request = HttpRequest.newBuilder(URI.create("https://github.com/SimonVerhoeven/java26-demo"))
                          .version(HttpClient.Version.HTTP_3)
@@ -235,7 +235,7 @@ It's important to note that HTTP/3 requires explicit server support. Servers mus
 * If HTTP/3 is unavailable or the connection fails, the client will *automatically fall back* to HTTP/2 or HTTP/1.1
 * This fallback mechanism ensures your application remains functional even when HTTP/3 isn't available
 
-[source,Java]
+[source,java]
 ----
 HttpClient client = HttpClient.newBuilder()
    .version(HttpClient.Version.HTTP_3)
@@ -324,21 +324,21 @@ try (final var scope = new StructuredTaskScope.ShutdownOnFailure()) {
 
 === https://openjdk.org/jeps/526[JEP-526: Lazy constants (Second preview)]
 
-This preview API, previously known as https://openjdk.org/jeps/502[JEP-502: Stable values] introduces immutable value holders that are at most initialized once, as it will help us move towards deferred immutability through `LazyConstant` and `StableSupplier`.
+This preview API, previously known as https://openjdk.org/jeps/502[JEP-502: Stable values], introduces immutable value holders that are at most initialised once, as it will help us move towards deferred immutability through `LazyConstant` and `StableSupplier`.
 
-One of the key benefits of stable values is in how they're handled by the JVM. Internally, the stable values use the internal `@Stable` annotation, which, despite the values being non-final, marks them as not changing after the initial updates. Thanks to this, these values benefit from the same constant-folding optimizations as final-fields.
+One of the key benefits of stable values is in how they're handled by the JVM. Internally, the stable values use the internal `@Stable` annotation, which, despite the values being non-final, marks them as not changing after the initial updates. Thanks to this, these values benefit from the same constant-folding optimisations as final-fields.
 
 Compared to the previous iteration, we see quite a number of changes, so please try out this API and provide feedback on the mailing lists.
 
 . The API has been renamed from `StableValue` to `LazyConstant` to better capture the intended high-level use case of a single constant value that is initialized lazily.
 . The focus of the API has moved to more high-level use cases, so low-level methods such as `orElseSet` and `trySet` have been removed. Meanwhile, the factory methods that take value-computing functions remain.
 . The factory methods for lazy lists and maps have been moved to their respective interfaces to make them easier to discover
-. The API has been simplified by removing the `function` and `intFunction` factory methods, given they provided minimal benefits over lazy lists and maps.
-. Null is no longer allowed as a computed value as to improve performance, and this better aligns lazy constants with other constructs in the language such as unmodifiable collections and `ScopedValue`
+. The API has been simplified by removing the `function` and `intFunction` factory methods, given that they provided minimal benefits over lazy lists and maps.
+. Null is no longer allowed as a computed value to improve performance, and this better aligns lazy constants with other constructs in the language, such as unmodifiable collections and `ScopedValue`
 
-For example, let's define a `LazyConstant` that initializes a `MapData` object by loading it only when it's first accessed:
+For example, let's define a `LazyConstant` that initialises a `MapData` object by loading it only when it's first accessed:
 
-[source,Java]
+[source,java]
 ----
 private final LazyConstant<MapData> mapData =
     LazyConstant.of(this::loadMapData); // <= not initialized yet
@@ -353,7 +353,7 @@ public Locale getSatelliteLayer() {
 
 The eleventh iteration of an API for vector computations, this time without any significant changes compared to the previous iteration (https://openjdk.org/jeps/508[JEP-508]). It aims to be a way to express these in a manner that compiles reliably to optimal vector instructions on supported CPU architectures to achieve better performance than equivalent scalar computations.
 
-Two important changes are the increased usage of auto-vectorization on
+Two important changes are the increased usage of auto-vectorisation on
 supporting x64 (AVX2/AVX-512) and AArch64 (NEON/SVE) architectures, and now leveraging the foreign function and memory API to link native mathematical-function libraries.
 
 The architects have confirmed that the API will remain in incubation until project Valhalla enters preview itself so that the API can leverage the expected performance and in-memory representation enhancements. Hence, why it's at its 11th incubation.
@@ -400,8 +400,8 @@ if (someObject instanceof int someInt) {
 
 Compared to the third preview in JDK 25 through https://openjdk.org/jeps/507[JEP-507], there are 2 changes.
 
-. the definition of unconditional exactness has been enhanced: The concept of "unconditional exactness" determines if a type pattern in a `switch` will always match, making subsequent cases unreachable. JEP 530 refines this definition to be more accurate, which in turn improves the next point
-. tighter dominance checks have been introduced in switch constructs: Dominance refers to one pattern matching all the values that another pattern matches. With the updated rules, the compiler can now more reliably detect when a `case` label is dominated by a previous one (and is therefore unreachable) and will report a compile-time error
+. The definition of unconditional exactness has been enhanced: The concept of "unconditional exactness" determines if a type pattern in a `switch` will always match, making subsequent cases unreachable. JEP 530 refines this definition to be more accurate, which in turn improves the next point
+. Tighter dominance checks have been introduced in switch constructs: Dominance refers to one pattern matching all the values that another pattern matches. With the updated rules, the compiler can now more reliably detect when a `case` label is dominated by a previous one (and is therefore unreachable) and will report a compile-time error
 
 This means that a small number of switch constructs that were legal under JEP-507 will be rejected under JEP-530. For instance, a case with a constant label that can be unconditionally converted to the type of a preceding pattern (like a `case 42` after a `case short s`) will now be seen as dominated and cause a compilation error, preventing a potentially unreachable branch of code.
 
@@ -434,7 +434,7 @@ It is possible that future iterations may expand support for non-standard PEM ty
 
 As this is a preview feature, you'll need to enable it through `--enable-preview` to experiment with it.
 
-Compared to the previous preview in Java 25 through https://openjdk.org/jeps/470[JEP-470] we see some changes:
+Compared to the previous preview in Java 25 through https://openjdk.org/jeps/470[JEP-470], we see some changes:
 
 * The `PEMRecord` class has been renamed to `PEM` and now offers a `decode()` method to return the decoded Base64 content
 * The `EncryptedPrivateKeyInfo` class has been expanded with a `getKeyPair` method that allows us to decrypt a `PKCS#8-encoded` text containing a `PublicKey`
@@ -454,7 +454,7 @@ If you're casting the result of a `java.net.URLConnection` `getContent()` method
 
 === https://bugs.openjdk.org/browse/JDK-8368237[JDK-8368237 - Thread.stop() removal]
 
-The `Thread.stop()` method has been removed, it was initially deprecated in Java 1.2 which released in December 1998.
+The `Thread.stop()` method has been removed; it was initially deprecated in Java 1.2, which was released in December 1998.
 If your code still uses this method, you'll need to refactor to use proper
 thread interruption mechanisms.
 
@@ -546,13 +546,13 @@ System.out.println(earlier.compareTo(later) < 0); // true - naturally time-order
 
 UUIDv7 *complements* the existing v4 format rather than replacing it. The choice between them depends on your requirements:
 
-* Use *v4* if: simplicity, maximum randomness, and broad compatibility are required, and insertion order or time ordering is unimportant.
-* Use *v7* if: you need insertion order, lexicographical sorting, more efficient database indexing, or want to embed creation time in the identifier.
+* Use *v4* if you need simplicity, maximum randomness, and broad compatibility are required, and insertion order or time ordering is unimportant.
+* Use *v7* if you need insertion order, lexicographical sorting, more efficient database indexing, or want to embed creation time in the identifier.
 
 [NOTE]
 .Backward Compatibility
 ====
-UUIDv7 is fully compatible with existing UUID infrastructure. All standard UUID methods (`toString()`, `fromString()`, etc.) work seamlessly, and UUIDv7 can be stored in existing UUID database columns without schema changes.
+UUIDv7 is fully compatible with the existing UUID infrastructure. All standard UUID methods (`toString()`, `fromString()`, etc.) work seamlessly, and UUIDv7 can be stored in existing UUID database columns without schema changes.
 ====
 
 [NOTE]
@@ -574,7 +574,7 @@ This makes UUIDv7 particularly valuable for:
 Java 26 adds support for https://unicode.org/versions/Unicode17.0.0/[Unicode 17.0], which includes new characters, scripts, and emoji.
 This ensures Java stays current with the latest text encoding standards.
 
-This release includes 4,803 new characters, of which 7 new emoji code points, 4 new scripts, and technical fixes.
+This release includes 4,803 new characters, of which 7 are new emoji code points, 4 are new scripts, and technical fixes.
 
 === https://bugs.openjdk.org/browse/JDK-8342705[JDK-8342705 - API documentation dark theme]
 
@@ -584,12 +584,12 @@ Java 26 introduces a dark theme for JavaDoc, making it easier on the eyes for de
 
 The default initial heap size has been reduced when neither `Xms` nor `-XX:InitialRAMPercentage` has been used. Prior to this release, the heap was set to 1/64th of the physical RAM by default; now it's set to 1/500th. To put this into context, on a 32 GiB this resulted in a 512 MiB heap, whereas in Java 26 it will be 64 MiB.
 
-Not only does this represent a significant reduction in the memory consumption of our applications, it can also speed up the startup of our applications given the initial data structure the Garbage Collector has to create will be smaller.
+Not only does this represent a significant reduction in the memory consumption of our applications, but it can also speed up the startup of our applications given that the initial data structure the Garbage Collector has to create will be smaller.
 
 === https://bugs.openjdk.org/browse/JDK-8354469[JDK-8354469 - Enhanced keytool password handling when output is redirected]
 
 This command reads passwords from the system console to avoid them being displayed on the screen.
-However, in previous releases, this did not work when the input or output stream were redirected.
+However, in previous releases, this did not work when the input or output stream was redirected.
 As of this release, the password will no longer be displayed on the screen even if the standard output stream is redirected. This improvement has also been made to the `jarsigner` command and the JAAS `TextCallbackHandler` API.
 
 === https://bugs.openjdk.org/browse/JDK-8354548[JDK-8354548 - Update CLDR to Version 48.0]
@@ -600,7 +600,7 @@ This entails:
 
 * CLDR-16439 zone alias South_Pole was moved to McMurdo, so remove it from Auckland (#4592)
 * CLDR-16665 key/type core values (#4577)
-* CLDR-13688 Correct the first day of week for Iceland from Monday to Sunday (#4379)
+* CLDR-13688 Correct the first day of the week for Iceland from Monday to Sunday (#4379)
 * CLDR-18464 Add a Before Hijrah era to the Islamic calendars (#4581)
 * CLDR-18572 Add more European Englishes (#4645)
 * CLDR-18253 Add en_JP (#4634)
@@ -651,7 +651,7 @@ public enum ByteOrder {
 
 === https://bugs.openjdk.org/browse/JDK-8364361[JDK-8364361 - java.lang.Process should implement Closeable]
 
-When a process launched via ProcessBuilder is torn down, the caller bears responsibility for closing its streams and ensuring the process terminates properly. Introducing a `Process.close()` method would provide a straightforward and intuitive means of ensuring all streams are closed and the process is terminated.
+When a process launched via ProcessBuilder is torn down, the caller bears responsibility for closing its streams and ensuring the process terminates properly. Introducing a `Process.close()` method would provide a straightforward and intuitive means of ensuring all streams are closed, and the process is terminated.
 
 The try-with-resources statement is commonly used to open streams whilst guaranteeing they're closed upon exiting the block. By implementing `AutoCloseable.close()`, the completeness of stream closure and process termination can be handled elegantly through try-with-resources.
 
@@ -663,25 +663,25 @@ The support for Sockets Direct Protocol, a protocol that has been obsolete for o
 
 === https://bugs.openjdk.org/browse/JDK-8369238[JDK-8369238 - Allow virtual thread preemption on some common class initialization paths]
 
-This update changes how the JVM manages these waiting states. By leveraging the same mechanisms used for `ObjectMonitor` (the internal logic behind synchronized blocks), the JVM can now preempt or unmount virtual threads that are waiting for class initialisation. Thus, further reducing when thread pinning might occur.
+This update changes how the JVM manages these waiting states. By leveraging the same mechanisms used for `ObjectMonitor` (the internal logic behind synchronised blocks), the JVM can now preempt or unmount virtual threads that are waiting for class initialisation. Thus, further reducing when thread pinning might occur.
 
 This means:
 
 * Improved Robustness: Virtual threads waiting on invokestatic, new, or static field access will no longer hog carrier threads.
 
-* Deadlock mitigation: The specific "pathological" deadlock described above is largely eliminated because the carrier thread is freed to do other work—such as finishing the very initialisation the virtual thread is waiting for.
+* Deadlock mitigation: The specific "pathological" deadlock described above is largely eliminated because the carrier thread is freed to do other work, such as finishing the very initialisation the virtual thread is waiting for.
 
-* Seamless scalability: You no longer need to worry as much about "heavy" class initialisers (static blocks that take a long time or perform complex logic) causing a ripple effect that stalls your entire virtual thread pool.
+* Seamless scalability: You no longer need to worry as much about "heavy" class initialisers (static blocks that take a long time or perform complex logic), causing a ripple effect that stalls your entire virtual thread pool.
 
 === https://bugs.openjdk.org/browse/JDK-8369432[JDK-8369432 - Add Support for JDBC 4.5 MR]
 
-This update to the specification will add enhan:
+This update to the specification includes the following changes:
 
 * Deprecate `SQLPermission` for removal
 * Enhance the `Blob`/`Clob`/`Array`/`SQLXML`/`NClob` interfaces to extend/support AutoClosable
 * Add the SQL types `DECFLOAT`, `JSON` to `Types.Java` and `JDBCType.java`
 * Add the quoted identifier methods that were added to the `Statement` interface in JDK 9 to the `Connection` interface with the exact same wording and methods
-* Clarify the `Timestamp::hashCode` method which incorrectly indicates that nanos are not used when calculating the hash
+* Clarify the `Timestamp::hashCode` method, which incorrectly indicates that nanos are not used when calculating the hash
 
 == Closing thoughts
 
