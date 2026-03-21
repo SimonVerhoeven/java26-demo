@@ -515,7 +515,7 @@ UUID another = UUID.ofEpochMillis(currentTimeMillis);
 System.out.println(uuid.equals(another)); // false - randomness ensures uniqueness
 
 // Retrieve the embedded timestamp
-long timestamp = uuid.getEpochMillis();
+long timestamp = uuid.timestamp();
 Instant creationTime = Instant.ofEpochMilli(timestamp);
 System.out.println("UUID created at: " + creationTime);
 
