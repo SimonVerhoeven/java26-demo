@@ -1,4 +1,4 @@
-package dev.simonverhoeven.java26demo.finalized.core;
+package dev.simonverhoeven.java26demo.preview.core;
 
 import java.util.concurrent.StructuredTaskScope;
 import java.util.function.Supplier;
