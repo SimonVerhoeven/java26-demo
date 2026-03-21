@@ -505,12 +505,13 @@ The new `UUID.ofEpochMillis(long)` method allows us to create a UUIDv7 from a ti
 
 [source,java]
 ----
+final var currentTimeMillis = System.currentTimeMillis();
 // Create a UUIDv7 from the current timestamp
-UUID uuid = UUID.ofEpochMillis(System.currentTimeMillis());
+UUID uuid = UUID.ofEpochMillis(currentTimeMillis);
 System.out.println(uuid); // e.g., 018e9e35-97af-7290-8000-123456789abc
 
 // Each call generates a unique UUID, even with the same timestamp
-UUID another = UUID.ofEpochMillis(System.currentTimeMillis());
+UUID another = UUID.ofEpochMillis(currentTimeMillis);
 System.out.println(uuid.equals(another)); // false - randomness ensures uniqueness
 
 // Retrieve the embedded timestamp
