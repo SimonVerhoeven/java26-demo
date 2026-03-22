@@ -283,7 +283,7 @@ This proposal aims to address some of the frequently encountered challenges in c
 
 The proposed approach, also known as structured concurrency, will help us streamline error handling, cancellation, and observability, making concurrent code more reliable and easier to manage.
 
-The main target is promoting a style of concurrent programming that eliminates common risks such as thread leaks and cancellation delays, while also improving the observability of concurrent code. The API itself is centered around `StructuredTaskScope`, which allows us to define a clear hierarchy of tasks and subtasks, ensuring that all subtasks are completed or canceled before the parent task exits. This enforces a structured flow of execution, similar to single-threaded code, where subtasks are confined to the lexical scope of their parent task. The API also provides built-in shutdown policies (e.g., `ShutdownOnFailure` and `ShutdownOnSuccess`) to handle common concurrency patterns, such as cancelling all subtasks if one fails or succeeds. We can also define our own shutdown policies.
+The main target is promoting a style of concurrent programming that eliminates common risks such as thread leaks and cancellation delays, while also improving the observability of concurrent code. The API itself is centered around `StructuredTaskScope`, which allows us to define a clear hierarchy of tasks and subtasks, ensuring that all subtasks are completed or canceled before the parent task exits. This enforces a structured flow of execution, similar to single-threaded code, where subtasks are confined to the lexical scope of their parent task. The API also provides built-in shutdown policies (e.g., `awaitAllSuccessfulOrThrow` and `anySuccessfulResultOrThrow`) to handle common concurrency patterns, such as cancelling all subtasks if one fails or succeeds. We can also define our own shutdown policies.
 
 By reifying the task-subtask relationship at runtime, structured concurrency makes it easier for us to reason about and debug concurrent programs. It also integrates well with observability tools, such as thread dumps, which can now display the hierarchical structure of tasks and subtasks.
 
@@ -294,28 +294,27 @@ Compared to the fifth preview (https://openjdk.org/jeps/505[JEP-505]), which saw
 * The `allSuccessfulOrThrow()` method on `Joiner` now returns a list of results rather than a stream of subtasks
 * The `anySuccessfulResultOrThrow()` method on `Joiner` has been renamed to `anySuccessfulOrThrow`
 * The static `open` method of `StructuredTaskScope` that accepted `Joiner` and `Function` now expects `Joiner` and `UnaryOperator`
-* A new method `onTimeOut` has been added to the `Joiner` interface, which allows implementations to return a result when the timeout expires
+* A new method `onTimeout` has been added to the `Joiner` interface, which allows implementations to return a result when the timeout expires
 
 In this example, we're starting three subtasks in parallel with the `StructuredTaskScope` API and waiting until we get the results of all the subtasks to compose the response. If one of the subtasks were to fail, the other, still-running subtasks will be cancelled, and `scope.throwIfFailed()` will throw the exception that happened in the failed subtask.
 
 [source,java]
 ----
-try (final var scope = new StructuredTaskScope.ShutdownOnFailure()) {
-   Supplier<Person> personTask =
-           scope.fork(() -> findPerson(userId));
-   Supplier<Weather> weatherTask =
-           scope.fork(this::fetchWeather);
-   Supplier<Activity> activityTask =
-           scope.fork(() -> findActivity(userId));
+try (final var scope = StructuredTaskScope.open()) {
+    Supplier<Person> personTask =
+            scope.fork(() -> findPerson(userId));
+    Supplier<Weather> weatherTask =
+            scope.fork(this::fetchWeather);
+    Supplier<Activity> activityTask =
+            scope.fork(() -> findActivity(userId));
 
-   scope.join();
-   scope.throwIfFailed();
+    scope.join();
 
-   final var person = personTask.get();
-   final var weather = weatherTask.get();
-   final var activity = activityTask.get();
+    final var person = personTask.get();
+    final var weather = weatherTask.get();
+    final var activity = activityTask.get();
 
-   return new GarderobeSelectionInput(person, weather, activity);
+    return new GarderobeSelectionInput(person, weather, activity);
 }
 ----
 
